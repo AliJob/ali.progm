@@ -36,7 +36,7 @@ h2 {
 input {
     width: 60%; /* Поля ввода занимают всю ширину контейнера */
     padding: 10px;
-    margin: 5px 0; /* Добавляем отступы между полями ввода */
+    margin: 1px 0; /* Добавляем отступы между полями ввода */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
