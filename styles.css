@@ -53,7 +53,7 @@ button:hover {
 }
 
 /* Стили для ноутбуков (ширина экрана больше 768px) */
-@media (min-width: 779px) {
+@media (min-width: 879px) {
     body {
         font-size: 18px; /* Увеличиваем базовый шрифт для ноутбуков */
         background-position: top; /* Смещаем фон вверх для ноутбуков */
