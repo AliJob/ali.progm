@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedAnswers = [];
     let userEmail = '';
 
-    // DOM элементы
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -67,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
             timeElement.textContent = time;
             if (time <= 0) {
                 clearInterval(timerInterval);
-                // Если время вышло, переход к следующему вопросу
                 selectedAnswers[currentQuestionIndex] = 'Не выбран';
                 nextQuestion();
             }
@@ -91,14 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function selectAnswer(selectedOption) {
-        clearInterval(timerInterval); // Остановить таймер при выборе ответа
+        clearInterval(timerInterval);
         const currentQuestion = questions[currentQuestionIndex];
         selectedAnswers[currentQuestionIndex] = selectedOption;
 
         if (selectedOption === currentQuestion.correctAnswer) {
             correctAnswers++;
         }
-        nextQuestion(); // Автоматически перейти к следующему вопросу
+        nextQuestion();
     }
 
     function nextQuestion() {
@@ -116,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultFullname.textContent = fullnameInput.value;
         resultCorrect.textContent = correctAnswers;
 
-        reviewButton.style.display = 'block'; // Показать кнопку для просмотра
+        reviewButton.style.display = 'block';
     }
 
     reviewButton.addEventListener('click', () => {
@@ -130,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const questionDiv = document.createElement('div');
             questionDiv.innerHTML = `
                 <p><strong>${question.question}</strong></p>
-                <p>Ваш ответ: ${selectedAnswers[index] || 'Не выбран'}</p>
-                <p>Правильный ответ: ${question.correctAnswer}</p>
+                <p>Your answer: ${selectedAnswers[index] || 'Not selected'}</p>
+                <p>Correct answer: ${question.correctAnswer}</p>
             `;
             reviewContainer.appendChild(questionDiv);
         });
@@ -141,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startButton.addEventListener('click', () => {
         userEmail = emailInput.value.trim();
         if (fullnameInput.value.trim() === "" || userEmail === "") {
-            alert("Пожалуйста, введите ваше ФИО и email!");
+            alert("Please enter your full name and email!");
             return;
         }
         introContainer.style.display = 'none';
