@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the external CSS file -->
 </head>
 <body>
 
-    <div id="intro">
+    <div id="intro" class="container">
         <h2>Welcome to the English Test</h2>
         <label for="fullname">Full Name:</label>
         <input type="text" id="fullname" placeholder="Enter your full name" required>
@@ -17,13 +17,13 @@
         <button id="start-button">Start Test</button>
     </div>
 
-    <div id="question-container" style="display: none;">
+    <div id="question-container" style="display: none;" class="container">
         <h2 id="question"></h2>
         <div id="options"></div>
         <p>Time: <span id="time">10</span> seconds</p>
     </div>
 
-    <div id="result" style="display: none;">
+    <div id="result" style="display: none;" class="container">
         <h3>Test Result</h3>
         <p id="result-fullname"></p>
         <p id="result-correct"></p>
