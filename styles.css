@@ -22,16 +22,25 @@ body {
     max-width: 600px; /* Ограничение ширины на больших экранах */
     box-sizing: border-box; /* Включаем отступы в размер контейнера */
     transition: all 0.3s ease; /* Плавный переход стилей */
+    display: flex;
+    flex-direction: column; /* Выравниваем элементы по вертикали */
+    align-items: center; /* Центрируем элементы по горизонтали */
 }
 
-h1 {
+h2 {
     text-align: center;
     font-size: 22px; /* Размер заголовка по умолчанию */
     margin-bottom: 20px;
 }
 
-#options {
-    margin: 20px 0;
+input {
+    width: 100%; /* Поля ввода занимают всю ширину контейнера */
+    padding: 10px;
+    margin: 10px 0; /* Добавляем отступы между полями ввода */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Учитываем padding в размере */
 }
 
 button {
@@ -65,7 +74,7 @@ button:hover {
         box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); /* Усиливаем тень для акцента */
     }
 
-    h1 {
+    h2 {
         font-size: 32px; /* Увеличиваем размер заголовка */
         margin-bottom: 30px; /* Увеличиваем отступ ниже заголовка */
     }
@@ -84,7 +93,7 @@ button:hover {
 
 /* Стили для телефонов (ширина экрана до 768px) */
 @media (max-width: 768px) {
-    h1 {
+    h2 {
         font-size: 20px; /* Уменьшаем заголовок на телефонах */
     }
 
