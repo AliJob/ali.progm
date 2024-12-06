@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultFullname = document.getElementById('result-fullname');
     const reviewButton = document.getElementById('review-button');
     const reviewContainer = document.getElementById('review-container');
+    const fullnameInput = document.getElementById('fullname'); // Define the fullname input element
+    const emailInput = document.getElementById('email'); // Define the email input element
 
     function startTimer() {
         time = 10;
