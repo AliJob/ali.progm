@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize EmailJS
+    emailjs.init(ali.jobirov08@gmail.com);  // Replace with your actual User ID from EmailJS
+
     const questions = [
         {
             question: "George is ................ than Nick.",
@@ -116,6 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCorrectElement.textContent = correctAnswers; // Update correct answers display
 
         reviewButton.style.display = 'block';
+        
+        // Send results to email
+        sendResultsToEmail();
     }
 
     reviewButton.addEventListener('click', () => {
@@ -135,6 +141,40 @@ document.addEventListener('DOMContentLoaded', () => {
             reviewContainer.appendChild(questionDiv);
         });
         reviewContainer.style.display = 'block';
+    }
+
+    function sendResultsToEmail() {
+        const fullname = fullnameInput.value;
+        const email = emailInput.value;
+
+        const resultMessage = `
+            Test Results:
+            Full Name: ${fullname}
+            Email: ${email}
+            Correct Answers: ${correctAnswers} / ${questions.length}
+
+            Answers:
+            ${questions.map((q, index) => {
+                return `${q.question}
+                        Your answer: ${selectedAnswers[index] || 'Not answered'}
+                        Correct answer: ${q.correctAnswer}\n`;
+            }).join("\n")}
+        `;
+
+        // Send email using EmailJS
+        const emailData = {
+            from_name: fullname,
+            to_name: 'Ali Jobirov',
+            user_email: email,
+            message: resultMessage
+        };
+
+        emailjs.send(service_6qqeibt, template_wmbckja, emailData)
+            .then((response) => {
+                console.log('Success', response);
+            }, (error) => {
+                console.error('Error', error);
+            });
     }
 
     startButton.addEventListener('click', () => {
