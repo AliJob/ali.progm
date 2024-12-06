@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             question: "What time ..... Calais tomorrow afternoon?",
             options: ["do the ferry reach ", "is the ferry reaching", "does the ferry reach"],
-            correctAnswer: "do the ferry reach "
+            correctAnswer: "does the ferry reach"
         },
         {
             question: "My friend ..................... lives in Australia is a nurse.",
@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultFullname = document.getElementById('result-fullname');
     const resultCorrect = document.getElementById('result-correct');
     const reviewButton = document.getElementById('review-button');
-    const reviewAnswersButton = document.getElementById('review-answers-button');
     const reviewContainer = document.getElementById('review-container');
 
     function startTimer() {
@@ -68,7 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             timeElement.textContent = time;
             if (time <= 0) {
                 clearInterval(timerInterval);
-                alert("Время вышло!");
+                // Если время вышло, переход к следующему вопросу
+                selectedAnswers[currentQuestionIndex] = 'Не выбран';
                 nextQuestion();
             }
         }, 1000);
@@ -91,17 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function selectAnswer(selectedOption) {
-        clearInterval(timerInterval);
+        clearInterval(timerInterval); // Остановить таймер при выборе ответа
         const currentQuestion = questions[currentQuestionIndex];
         selectedAnswers[currentQuestionIndex] = selectedOption;
 
         if (selectedOption === currentQuestion.correctAnswer) {
             correctAnswers++;
-            alert("Правильный ответ!");
-        } else {
-            alert("Неправильный ответ!");
         }
-        nextQuestion();
+        nextQuestion(); // Автоматически перейти к следующему вопросу
     }
 
     function nextQuestion() {
@@ -119,43 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resultFullname.textContent = fullnameInput.value;
         resultCorrect.textContent = correctAnswers;
 
-        // Автоматическая отправка результатов на почту
-        sendResultsToEmail();
-
-        reviewButton.style.display = 'block';
-        reviewAnswersButton.style.display = 'block'; // Показать кнопку для просмотра
-    }
-
-    function sendResultsToEmail() {
-        const templateParams = {
-            from_email: "your_email@example.com", // Замените на ваш email
-            to_email: userEmail,
-            fullname: fullnameInput.value,
-            correct_answers: correctAnswers,
-            questions: questions.map((q, index) => ({
-                question: q.question,
-                userAnswer: selectedAnswers[index] || 'Не выбран',
-                correctAnswer: q.correctAnswer
-            }))
-        };
-
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-            .then(function(response) {
-                console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-                console.log('FAILED...', error);
-                alert("Не удалось отправить результаты на почту. Попробуйте снова.");
-            });
+        reviewButton.style.display = 'block'; // Показать кнопку для просмотра
     }
 
     reviewButton.addEventListener('click', () => {
         resultContainer.style.display = 'none';
         showReview();
-    });
-
-    reviewAnswersButton.addEventListener('click', () => {
-        resultContainer.style.display = 'none';
-        showAnswersReview();
     });
 
     function showReview() {
@@ -166,23 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>${question.question}</strong></p>
                 <p>Ваш ответ: ${selectedAnswers[index] || 'Не выбран'}</p>
                 <p>Правильный ответ: ${question.correctAnswer}</p>
-            `;
-            reviewContainer.appendChild(questionDiv);
-        });
-        reviewContainer.style.display = 'block';
-    }
-
-    function showAnswersReview() {
-        reviewContainer.innerHTML = '';
-        questions.forEach((question, index) => {
-            const questionDiv = document.createElement('div');
-            const isCorrect = selectedAnswers[index] === question.correctAnswer;
-
-            questionDiv.innerHTML = `
-                <p><strong>${question.question}</strong></p>
-                <p style="color: ${isCorrect ? 'green' : 'red'};">Ваш ответ: <strong>${selectedAnswers[index] || 'Не выбран'}</strong></p>
-                <p>Правильный ответ: <strong>${question.correctAnswer}</strong></p>
-                ${!isCorrect ? "<p style='color: red;'>Вы допустили ошибку в этом вопросе.</p>" : ""}
             `;
             reviewContainer.appendChild(questionDiv);
         });
