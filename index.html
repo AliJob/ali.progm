@@ -1,38 +1,37 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тестирование</title>
+    <title>Test</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
-    <script src="script.js" defer></script> <!-- Подключение JavaScript файла -->
 </head>
 <body>
-<div class="container" id="intro">
-    <h1>English test</h1>
-    <input type="text" id="fullname" placeholder="Введите ваше ФИО" required>
-    <input type="email" id="email" placeholder="Введите ваш email" required>
-    <p>
-    <button id="start-button">Start</button>
-    </p>
-</div>
-<div class="container" id="question-container" style="display: none;">
-    <div id="question"></div>
-    <div id="options"></div>
-    <div id="timer">remaining time: <span id="time">10</span> seconds</div>
 
-</div>
-<div class="container" id="result" style="display: none;">
-    <h2>Результаты</h2>
-    <p>ФИО: <span id="result-fullname"></span></p>
-    <p>Правильные ответы: <span id="result-correct"></span></p>
-    <button id="review-button" style="display:none;">Посмотреть правильные ответы</button>
-    <p>
-    <button id="review-answers-button" style="display:none;">Посмотреть свои ответы</button>
-    </p>
-</div>
-<div id="review-container" style="display: none;"></div>
+    <div id="intro">
+        <h2>Welcome to the Quiz</h2>
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" placeholder="Enter your full name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button id="start-button">Start Test</button>
+    </div>
 
+    <div id="question-container" style="display: none;">
+        <h2 id="question"></h2>
+        <div id="options"></div>
+        <p>Time: <span id="time">10</span> seconds</p>
+    </div>
+
+    <div id="result" style="display: none;">
+        <h3>Test Result</h3>
+        <p id="result-fullname"></p>
+        <p id="result-correct"></p>
+        <button id="review-button" style="display: none;">Review Test</button>
+    </div>
+
+    <div id="review-container" style="display: none;"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
