@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize EmailJS with your user ID
-    emailjs.init(YVG_87gJlzZuy3NtW);  // Replace with your actual EmailJS user ID
+    emailjs.init('YVG_87gJlzZuy3NtW');  // Replace with your actual EmailJS user ID
 
     const questions = [
         {
