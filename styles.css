@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    /* Убираем background-color, чтобы фон был изображением */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-size: 20px;
+    background-image: url(artistic-blurry-colorful-wallpaper-background_58702-8158.avif); /* Замените на путь к вашей картинке */
+    background-size: cover; /* Покрывает весь фон */
+    background-repeat: no-repeat; /* Не повторяет картинку */
+    background-position: center; /* Центрирует картинку */
+}
+
+
+.container {
+    background: white;
+    padding: 250px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px; /* Установите размер шрифта для заголовка h1 */
+}
+
+#options {
+    margin: 20px 0;
+}
+
+button {
+    display: block;
+    margin: 0 auto;
+    font-size: 18px; /* Установите размер шрифта для кнопок */
+}
