@@ -33,10 +33,17 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* Стиль для меток, чтобы они были жирными */
+label {
+    font-weight: bold;
+    margin-top: 10px; /* Отступ сверху */
+    margin-bottom: 5px; /* Отступ снизу */
+}
+
 input {
     width: 60%; /* Поля ввода занимают всю ширину контейнера */
     padding: 10px;
-    margin: 1px 0; /* Добавляем отступы между полями ввода */
+    margin: 10px 0; /* Добавляем отступы между полями ввода */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
