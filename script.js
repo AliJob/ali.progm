@@ -42,21 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerInterval;
     let correctAnswers = 0;
     let selectedAnswers = [];
-    let userEmail = '';
 
-    // DOM элементы
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
     const timeElement = document.getElementById('time');
     const startButton = document.getElementById('start-button');
-    const introContainer = document.getElementById('intro');
-    const resultContainer = document.getElementById('result');
-    const fullnameInput = document.getElementById('fullname');
-    const emailInput = document.getElementById('email');
-    const resultFullname = document.getElementById('result-fullname');
-    const resultCorrect = document.getElementById('result-correct');
-    const reviewContainer = document.getElementById('review-container');
+    const nextButton = document.getElementById('next-button');
 
     function startTimer() {
         time = 10;
@@ -66,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
             timeElement.textContent = time;
             if (time <= 0) {
                 clearInterval(timerInterval);
-                nextQuestion();
+                alert("Время вышло! Выберите ответ, чтобы продолжить.");
+                nextButton.disabled = false;
             }
         }, 1000);
     }
@@ -74,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showQuestion() {
         clearInterval(timerInterval);
         startTimer();
+        nextButton.disabled = true;
 
         const currentQuestion = questions[currentQuestionIndex];
         questionElement.textContent = currentQuestion.question;
@@ -89,18 +83,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function selectAnswer(selectedOption) {
         clearInterval(timerInterval);
-
         const currentQuestion = questions[currentQuestionIndex];
         selectedAnswers[currentQuestionIndex] = selectedOption;
 
-        const feedback = document.createElement('p');
-        feedback.style.color = selectedOption === currentQuestion.correctAnswer ? 'green' : 'red';
-        feedback.textContent =
-            selectedOption === currentQuestion.correctAnswer
-                ? "Правильный ответ!"
-                : `Неправильный ответ! Правильный: ${currentQuestion.correctAnswer}`;
-
-        optionsElement.appendChild(feedback);
-
         if (selectedOption === currentQuestion.correctAnswer) {
-            correct
+            correctAnswers++;
+            alert("Правильный ответ!");
+        } else {
+            alert("Неправильный ответ!");
+        }
+        nextButton.disabled = false;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion();
+        } else {
+            alert(`Вы завершили тест! Правильных ответов: ${correctAnswers}`);
+        }
+    }
+
+    startButton.addEventListener('click', () => {
+        startButton.style.display = 'none';
+        questionContainer.style.display = 'block';
+        showQuestion();
+    });
+
+    nextButton.addEventListener('click', () => {
+        nextQuestion();
+    });
+});
