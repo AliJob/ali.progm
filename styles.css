@@ -5,28 +5,29 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-size: 16px; /* Сделаем шрифт немного меньше для удобства */
-    background-image: url(artistic-blurry-colorful-wallpaper-background_58702-8158.avif); /* Замените на путь к вашей картинке */
+    font-size: 16px; /* Базовый размер шрифта */
+    background-image: url(artistic-blurry-colorful-wallpaper-background_58702-8158.avif); /* Путь к вашей картинке */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    padding: 10px; /* Добавляем отступы, чтобы контент не прилипал к краям */
+    padding: 10px; /* Отступы для предотвращения прилипания контента к краям */
 }
 
 .container {
     background: white;
-    padding: 20px; /* Уменьшаем отступы для мобильных устройств */
+    padding: 20px; /* Базовые отступы */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Контейнер будет занимать всю ширину */
-    max-width: 400px; /* Ограничиваем ширину контейнера на больших экранах */
+    width: 100%; /* Контейнер занимает всю ширину */
+    max-width: 400px; /* Ограничение ширины на больших экранах */
     box-sizing: border-box; /* Включаем отступы в размер контейнера */
+    transition: all 0.3s ease; /* Плавный переход стилей */
 }
 
 h1 {
     text-align: center;
-    font-size: 22px; /* Уменьшаем размер шрифта заголовка для телефонов */
-    margin-bottom: 20px; /* Добавляем отступ снизу для читаемости */
+    font-size: 22px; /* Размер заголовка по умолчанию */
+    margin-bottom: 20px;
 }
 
 #options {
@@ -35,34 +36,57 @@ h1 {
 
 button {
     display: block;
-    width: 100%; /* Кнопки будут растягиваться по ширине контейнера */
-    margin: 10px 0; /* Добавляем равномерные отступы между кнопками */
-    font-size: 16px; /* Немного уменьшаем шрифт кнопок */
-    padding: 12px; /* Увеличиваем высоту кнопок для удобного нажатия */
+    width: 100%; /* Кнопки растягиваются на всю ширину контейнера */
+    margin: 10px 0;
+    font-size: 16px; /* Размер шрифта кнопок */
+    padding: 12px;
     border: none;
-    border-radius: 4px; /* Добавляем небольшие закругления */
-    background-color: #1da1f2; /* Устанавливаем синий цвет кнопок */
-    color: white; /* Цвет текста кнопки */
-    cursor: pointer; /* Указатель мыши при наведении */
-    transition: background-color 0.3s ease; /* Добавляем плавный эффект наведения */
+    border-radius: 4px;
+    background-color: #1da1f2; /* Основной цвет кнопок */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Плавный эффект при наведении */
 }
 
 button:hover {
     background-color: #0056b3; /* Цвет кнопки при наведении */
 }
 
-@media (max-width: 768px) {
-    /* Адаптация для планшетов и телефонов */
+/* Стили для ноутбуков (ширина экрана больше 768px) */
+@media (min-width: 769px) {
+    body {
+        font-size: 18px; /* Увеличиваем базовый шрифт для ноутбуков */
+        background-position: top; /* Смещаем фон вверх для ноутбуков */
+    }
+
+    .container {
+        max-width: 600px; /* Увеличиваем ширину контейнера на ноутбуках */
+        padding: 40px; /* Добавляем больше отступов */
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Усиливаем тень */
+    }
+
     h1 {
-        font-size: 20px; /* Еще меньше заголовок на телефонах */
+        font-size: 28px; /* Увеличиваем заголовок */
     }
 
     button {
-        font-size: 14px; /* Уменьшаем шрифт кнопок для мобильных устройств */
+        font-size: 18px; /* Увеличиваем размер шрифта кнопок */
+        padding: 15px; /* Увеличиваем высоту кнопок */
+    }
+}
+
+/* Стили для телефонов (ширина экрана до 768px) */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 20px; /* Уменьшаем заголовок на телефонах */
+    }
+
+    button {
+        font-size: 14px; /* Уменьшаем размер шрифта кнопок */
         padding: 10px; /* Уменьшаем высоту кнопок */
     }
 
     .container {
-        padding: 15px; /* Сужаем отступы в контейнере для телефонов */
+        padding: 15px; /* Сужаем отступы в контейнере */
     }
 }
