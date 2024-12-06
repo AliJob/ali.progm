@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             question: "What time ..... Calais tomorrow afternoon?",
-            options: ["do the ferry reach ", "is the ferry reaching", "does the ferry reach"],
+            options: ["do the ferry reach", "is the ferry reaching", "does the ferry reach"],
             correctAnswer: "does the ferry reach"
         },
         {
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             correctAnswer: "wins"
         },
         {
-            question: "Who is the president of USA",
+            question: "Who is the president of USA?",
             options: ["Alisher Jobirov", "Donald Trump", "Ali", "Jobirov"],
             correctAnswer: "Ali"
         },
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedAnswers = [];
     let userEmail = '';
 
+    // DOM elements
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -51,10 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-button');
     const introContainer = document.getElementById('intro');
     const resultContainer = document.getElementById('result');
-    const fullnameInput = document.getElementById('fullname');
-    const emailInput = document.getElementById('email');
+    const resultCorrectElement = document.getElementById('correct-answers'); // Correct answers element
     const resultFullname = document.getElementById('result-fullname');
-    const resultCorrect = document.getElementById('result-correct');
     const reviewButton = document.getElementById('review-button');
     const reviewContainer = document.getElementById('review-container');
 
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timeElement.textContent = time;
             if (time <= 0) {
                 clearInterval(timerInterval);
-                selectedAnswers[currentQuestionIndex] = 'Не выбран';
+                selectedAnswers[currentQuestionIndex] = 'Not Answered';
                 nextQuestion();
             }
         }, 1000);
@@ -112,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questionContainer.style.display = 'none';
         resultContainer.style.display = 'block';
         resultFullname.textContent = fullnameInput.value;
-        resultCorrect.textContent = correctAnswers;
+        resultCorrectElement.textContent = correctAnswers; // Update correct answers display
 
         reviewButton.style.display = 'block';
     }
@@ -128,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const questionDiv = document.createElement('div');
             questionDiv.innerHTML = `
                 <p><strong>${question.question}</strong></p>
-                <p>Your answer: ${selectedAnswers[index] || 'Not selected'}</p>
+                <p>Your answer: ${selectedAnswers[index] || 'Not answered'}</p>
                 <p>Correct answer: ${question.correctAnswer}</p>
             `;
             reviewContainer.appendChild(questionDiv);
