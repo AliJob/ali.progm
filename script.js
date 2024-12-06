@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize EmailJS
-    emailjs.init(ali.jobirov08@gmail.com);  // Replace with your actual User ID from EmailJS
+    // Initialize EmailJS with your user ID
+    emailjs.init('YOUR_USER_ID');  // Replace with your actual EmailJS user ID
 
     const questions = [
         {
@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultFullname = document.getElementById('result-fullname');
     const reviewButton = document.getElementById('review-button');
     const reviewContainer = document.getElementById('review-container');
-    const fullnameInput = document.getElementById('fullname'); // Define the fullname input element
-    const emailInput = document.getElementById('email'); // Define the email input element
+    const fullnameInput = document.getElementById('fullname');
+    const emailInput = document.getElementById('email');
 
     function startTimer() {
         time = 10;
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message: resultMessage
         };
 
-        emailjs.send(service_6qqeibt, template_wmbckja, emailData)
+        emailjs.send('service_6qqeibt', 'template_wmbckja', emailData)
             .then((response) => {
                 console.log('Success', response);
             }, (error) => {
