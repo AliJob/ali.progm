@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize EmailJS with your user ID
-    emailjs.init('YVG_87gJlzZuy3NtW');  // Replace with your actual EmailJS user ID
+    // Initialize EmailJS
+    emailjs.init("YOUR_USER_ID");  // Replace with your actual User ID from EmailJS
 
     const questions = [
         {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-button');
     const introContainer = document.getElementById('intro');
     const resultContainer = document.getElementById('result');
-    const resultCorrectElement = document.getElementById('correct-answers'); // Correct answers element
+    const resultCorrectElement = document.getElementById('correct-answers');
     const resultFullname = document.getElementById('result-fullname');
     const reviewButton = document.getElementById('review-button');
     const reviewContainer = document.getElementById('review-container');
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questionContainer.style.display = 'none';
         resultContainer.style.display = 'block';
         resultFullname.textContent = fullnameInput.value;
-        resultCorrectElement.textContent = correctAnswers; // Update correct answers display
+        resultCorrectElement.textContent = correctAnswers; 
 
         reviewButton.style.display = 'block';
         
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message: resultMessage
         };
 
-        emailjs.send('service_6qqeibt', 'template_wmbckja', emailData)
+        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailData)
             .then((response) => {
                 console.log('Success', response);
             }, (error) => {
@@ -178,11 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startButton.addEventListener('click', () => {
-        userEmail = emailInput.value.trim();
-        if (fullnameInput.value.trim() === "" || userEmail === "") {
-            alert("Please enter your full name and email!");
+        // Validate the input fields (both required fields)
+        if (fullnameInput.value.trim() === "" || emailInput.value.trim() === "") {
+            alert("Please enter both your full name and email!");
             return;
         }
+
+        userEmail = emailInput.value.trim();
         introContainer.style.display = 'none';
         questionContainer.style.display = 'block';
         showQuestion();
