@@ -41,7 +41,7 @@ button {
     padding: 12px; /* Увеличиваем высоту кнопок для удобного нажатия */
     border: none;
     border-radius: 4px; /* Добавляем небольшие закругления */
-    background-color: #50d4ff; /* Устанавливаем синий цвет кнопок */
+    background-color: #1da1f2; /* Устанавливаем синий цвет кнопок */
     color: white; /* Цвет текста кнопки */
     cursor: pointer; /* Указатель мыши при наведении */
     transition: background-color 0.3s ease; /* Добавляем плавный эффект наведения */
