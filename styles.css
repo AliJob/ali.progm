@@ -24,7 +24,7 @@ body {
     transition: all 0.3s ease; /* Плавный переход стилей */
     display: flex;
     flex-direction: column; /* Выравниваем элементы по вертикали */
-    align-items: center; /* Центрируем элементы по горизонтали */
+    align-items: flex-start; /* Центрируем элементы по вертикали, но выравниваем их по левому краю */
 }
 
 h2 {
@@ -38,12 +38,13 @@ label {
     font-weight: bold;
     margin-top: 10px; /* Отступ сверху */
     margin-bottom: 5px; /* Отступ снизу */
+    align-self: flex-start; /* Выравнивание метки по левому краю */
 }
 
 input {
     width: 60%; /* Поля ввода занимают всю ширину контейнера */
     padding: 10px;
-    margin: 10px 0; /* Добавляем отступы между полями ввода */
+    margin: 1px 0; /* Добавляем отступы между полями ввода */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
