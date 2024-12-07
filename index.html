@@ -9,6 +9,7 @@
 </head>
 <body>
 
+    <!-- Intro Section -->
     <div id="intro" class="container">
         <h2>Welcome to the English Test</h2>
         <label for="fullname"></label>
@@ -18,12 +19,22 @@
         <button id="start-button">Start Test</button>
     </div>
 
+    <!-- Test Instructions Window -->
+    <div id="info-window" style="display: none;" class="container">
+        <h2>Test Instructions</h2>
+        <p>The test consists of <strong>10 questions</strong>. Each question must be answered within <strong>10 seconds</strong>. 
+           If you do not answer a question within the given time, the next question will automatically start.</p>
+        <button id="ok-button">OK</button>
+    </div>
+
+    <!-- Test Question Section -->
     <div id="question-container" style="display: none;" class="container">
         <h2 id="question"></h2>
         <div id="options"></div>
         <p>Time: <span id="time">10</span> seconds</p>
     </div>
 
+    <!-- Test Result Section -->
     <div id="result" style="display: none;" class="container">
         <h3>Test Result</h3>
         <p id="result-fullname"></p>
@@ -31,6 +42,7 @@
         <button id="review-button" style="display: none;">Review Test</button>
     </div>
 
+    <!-- Review Section -->
     <div id="review-container" style="display: none;"></div>
 
     <script src="script.js"></script>
