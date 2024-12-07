@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const optionsElement = document.getElementById('options');
     const timeElement = document.getElementById('time');
     const startButton = document.getElementById('start-button');
+    const infoWindow = document.getElementById('info-window');
+    const okButton = document.getElementById('ok-button');
     const introContainer = document.getElementById('intro');
     const resultContainer = document.getElementById('result');
     const resultCorrectElement = document.getElementById('correct-answers');
@@ -119,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCorrectElement.textContent = correctAnswers; 
 
         reviewButton.style.display = 'block';
-        sendResultsToEmail();
     }
 
     reviewButton.addEventListener('click', () => {
@@ -139,43 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             reviewContainer.appendChild(questionDiv);
         });
-
         reviewContainer.style.display = 'block';
-
-        // 🔐 Hide text during screenshot
-        reviewContainer.classList.add('hide-on-screenshot');
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                reviewContainer.classList.add('screenshot-block');
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'PrintScreen' || (e.ctrlKey && e.shiftKey && e.code === 'KeyS')) {
-                reviewContainer.classList.add('screenshot-block');
-                alert("Screenshots are disabled.");
-            }
-        });
-    }
-
-    function sendResultsToEmail() {
-        const fullname = fullnameInput.value;
-        const email = emailInput.value;
-
-        const emailData = {
-            from_name: fullname,
-            to_name: 'Ali Jobirov',
-            user_email: email,
-            message: `Correct Answers: ${correctAnswers} / ${questions.length}`
-        };
-
-        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailData)
-            .then((response) => {
-                console.log('Success', response);
-            }, (error) => {
-                console.error('Error', error);
-            });
     }
 
     startButton.addEventListener('click', () => {
@@ -183,9 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Please enter both your full name and email!");
             return;
         }
-
-        userEmail = emailInput.value.trim();
         introContainer.style.display = 'none';
+        infoWindow.style.display = 'block';
+    });
+
+    okButton.addEventListener('click', () => {
+        infoWindow.style.display = 'none';
         questionContainer.style.display = 'block';
         showQuestion();
     });
