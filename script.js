@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize EmailJS
-    emailjs.init("YOUR_USER_ID");  // Replace with your actual User ID from EmailJS
+    emailjs.init("YOUR_USER_ID"); // Replace with your actual User ID from EmailJS
 
     const questions = [
         {
@@ -17,26 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             question: "My friend ..................... lives in Australia is a nurse.",
             options: ["who", "which", "whose"],
             correctAnswer: "who"
-        },
-        {
-            question: "I like walking in the park ............. hot days.",
-            options: ["at", "on", "in"],
-            correctAnswer: "in"
-        },
-        {
-            question: "Centuries ago, people .......... animals for food.",
-            options: ["transport", "played", "hunted"],
-            correctAnswer: "hunted"
-        },
-        {
-            question: "If he ................... the lottery, he'll go on a round-the-world trip",
-            options: ["won", "wins", "will win"],
-            correctAnswer: "wins"
-        },
-        {
-            question: "Who is the president of USA?",
-            options: ["Alisher Jobirov", "Donald Trump", "Ali", "Jobirov"],
-            correctAnswer: "Ali"
         },
     ];
 
@@ -119,8 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCorrectElement.textContent = correctAnswers; 
 
         reviewButton.style.display = 'block';
-        
-        // Send results to email
         sendResultsToEmail();
     }
 
@@ -133,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewContainer.innerHTML = '';
         questions.forEach((question, index) => {
             const questionDiv = document.createElement('div');
+            questionDiv.classList.add('no-copy');
             questionDiv.innerHTML = `
                 <p><strong>${question.question}</strong></p>
                 <p>Your answer: ${selectedAnswers[index] || 'Not answered'}</p>
@@ -147,26 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullname = fullnameInput.value;
         const email = emailInput.value;
 
-        const resultMessage = `
-            Test Results:
-            Full Name: ${fullname}
-            Email: ${email}
-            Correct Answers: ${correctAnswers} / ${questions.length}
-
-            Answers:
-            ${questions.map((q, index) => {
-                return `${q.question}
-                        Your answer: ${selectedAnswers[index] || 'Not answered'}
-                        Correct answer: ${q.correctAnswer}\n`;
-            }).join("\n")}
-        `;
-
-        // Send email using EmailJS
         const emailData = {
             from_name: fullname,
             to_name: 'Ali Jobirov',
             user_email: email,
-            message: resultMessage
+            message: `Correct Answers: ${correctAnswers} / ${questions.length}`
         };
 
         emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailData)
@@ -178,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startButton.addEventListener('click', () => {
-        // Validate the input fields (both required fields)
         if (fullnameInput.value.trim() === "" || emailInput.value.trim() === "") {
             alert("Please enter both your full name and email!");
             return;
@@ -189,4 +152,23 @@ document.addEventListener('DOMContentLoaded', () => {
         questionContainer.style.display = 'block';
         showQuestion();
     });
+
+    // 🔐 Защита от копирования
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('selectstart', (e) => e.preventDefault());
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // 🔐 Блокировка скриншотов
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'PrintScreen' || (e.ctrlKey && e.shiftKey && e.code === 'KeyS')) {
+            e.preventDefault();
+            alert("Screenshots are disabled.");
+        }
+    });
+
+    // 🔐 Отключаем копирование внутри контейнера для ревью
+    const reviewSection = document.getElementById('review-container');
+    if (reviewSection) {
+        reviewSection.oncopy = (e) => e.preventDefault();
+    }
 });
