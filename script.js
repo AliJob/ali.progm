@@ -139,7 +139,24 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             reviewContainer.appendChild(questionDiv);
         });
+
         reviewContainer.style.display = 'block';
+
+        // 🔐 Hide text during screenshot
+        reviewContainer.classList.add('hide-on-screenshot');
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                reviewContainer.classList.add('screenshot-block');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'PrintScreen' || (e.ctrlKey && e.shiftKey && e.code === 'KeyS')) {
+                reviewContainer.classList.add('screenshot-block');
+                alert("Screenshots are disabled.");
+            }
+        });
     }
 
     function sendResultsToEmail() {
@@ -172,23 +189,4 @@ document.addEventListener('DOMContentLoaded', () => {
         questionContainer.style.display = 'block';
         showQuestion();
     });
-
-    // 🔐 Защита от копирования
-    document.addEventListener('contextmenu', (e) => e.preventDefault());
-    document.addEventListener('selectstart', (e) => e.preventDefault());
-    document.addEventListener('dragstart', (e) => e.preventDefault());
-
-    // 🔐 Блокировка скриншотов
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'PrintScreen' || (e.ctrlKey && e.shiftKey && e.code === 'KeyS')) {
-            e.preventDefault();
-            alert("Screenshots are disabled.");
-        }
-    });
-
-    // 🔐 Отключаем копирование внутри контейнера для ревью
-    const reviewSection = document.getElementById('review-container');
-    if (reviewSection) {
-        reviewSection.oncopy = (e) => e.preventDefault();
-    }
 });
