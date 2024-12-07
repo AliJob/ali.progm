@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     emailjs.init("YOUR_USER_ID"); // Replace with your actual User ID from EmailJS
 
     const questions = [
+        {
             question: "George is ................ than Nick.",
             options: ["tall", "taller", "tallest"],
             correctAnswer: "taller"
