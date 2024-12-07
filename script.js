@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             question: "Who is the president of USA?",
             options: ["Barak Obama", "Donald Trump", "Ali Jobirov", "Joe Biden"],
-            correctAnswer: "Ali"
+            correctAnswer: "Ali Jobirov"
         },
     ];
 
