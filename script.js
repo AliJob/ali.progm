@@ -111,33 +111,41 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.text(`Email: ${email}`, 10, 40);
         doc.text(`Correct Answers: ${correctAnswers} / ${questions.length}`, 10, 50);
         doc.text(`Incorrect Answers: ${questions.length - correctAnswers}`, 10, 60);
-        
-        let y = 80;
-        let hasIncorrectAnswers = false;
 
+        let y = 70;
+        const pageHeight = doc.internal.pageSize.height;
+
+        // Проверяем все вопросы
         questions.forEach((q, index) => {
+            if (y + 30 > pageHeight) { // Переход на новую страницу, если не хватает места
+                doc.addPage();
+                y = 10;
+            }
+
             doc.setFont("helvetica", "bold");
             doc.text(`${index + 1}. ${q.question}`, 10, y);
             y += 10;
 
+            // Отображаем варианты ответов
             q.options.forEach((option, optionIndex) => {
                 doc.setFont("helvetica", "normal");
                 doc.text(`${option}`, 10, y);
                 y += 5;
             });
 
+            // Отображаем выбранный ответ
             const userAnswer = selectedAnswers[index] || "Not Answered";
             doc.text(`Your Answer: ${userAnswer}`, 10, y);
 
-            // Указание, правильно ли выбран ответ
+            // Пометка "Правильно" или "Неправильно"
             if (selectedAnswers[index] === q.correctAnswer) {
                 doc.setTextColor(0, 255, 0); // Зеленый для правильного ответа
                 doc.text("✔ Correct", 150, y);
-                doc.setTextColor(0, 0, 0); // Возвращаем цвет текста
+                doc.setTextColor(0, 0, 0);
             } else {
                 doc.setTextColor(255, 0, 0); // Красный для неправильного ответа
                 doc.text("✘ Incorrect", 150, y);
-                doc.setTextColor(0, 0, 0); // Возвращаем цвет текста
+                doc.setTextColor(0, 0, 0);
             }
             y += 15;
         });
