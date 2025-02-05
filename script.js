@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
-        doc.text("English Test Results - Incorrect Answers", 10, 20);
+        doc.text("Test Results", 10, 20);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
@@ -122,7 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 doc.text(`${index + 1}. ${q.question}`, 10, y);
                 doc.setFont("helvetica", "normal");
                 doc.text(`Your Answer: ${selectedAnswers[index] || "Not Answered"}`, 10, y + 10);
-                doc.text(`Correct Answer: ${q.correctAnswer}`, 10, y + 20);
+
+                // Строка с правильным ответом удалена
 
                 doc.setTextColor(255, 0, 0);
                 doc.text("✘ Incorrect", 150, y + 10);
@@ -137,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             doc.text("Great job! No incorrect answers!", 10, y);
         }
 
-        doc.save("Test_Results_Incorrect_Answers.pdf");
+        doc.save("Test_Results.pdf");
     }
 
     startButton.addEventListener('click', () => {
