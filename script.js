@@ -22,6 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
+    // Функция для случайного перемешивания массива
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Меняем местами элементы
+        }
+    }
+
     function startTimer() {
         time = 10;
         timeElement.textContent = time;
@@ -44,7 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         questionElement.textContent = currentQuestion.question;
 
         optionsElement.innerHTML = '';
-        currentQuestion.options.forEach((option) => {
+
+        // Сначала перемешиваем варианты ответов
+        const shuffledOptions = [...currentQuestion.options];
+        shuffleArray(shuffledOptions);
+
+        shuffledOptions.forEach((option) => {
             const button = document.createElement('button');
             button.textContent = option;
             button.onclick = () => selectAnswer(option);
