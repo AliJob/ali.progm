@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    emailjs.init("YVG_87gJlzZuy3NtW"); 
+    emailjs.init("YVG_87gJlzZuy3NtW"); // ВАШ EmailJS Public Key
 
     let currentQuestionIndex = 0;
     let time = 10;
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
-        doc.text("English Test Results", 10, 20);
+        doc.text("English Test Results - Incorrect Answers", 10, 20);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
@@ -113,25 +113,31 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.text(`Incorrect Answers: ${questions.length - correctAnswers}`, 10, 60);
         
         let y = 80;
-        questions.forEach((q, index) => {
-            doc.setFont("helvetica", "bold");
-            doc.text(`${index + 1}. ${q.question}`, 10, y);
-            doc.setFont("helvetica", "normal");
-            doc.text(`Your Answer: ${selectedAnswers[index] || "Not Answered"}`, 10, y + 10);
-            doc.text(`Correct Answer: ${q.correctAnswer}`, 10, y + 20);
+        let hasIncorrectAnswers = false;
 
-            if (selectedAnswers[index] === q.correctAnswer) {
-                doc.setTextColor(0, 128, 0);
-                doc.text("✔ Correct", 150, y + 10);
-            } else {
+        questions.forEach((q, index) => {
+            if (selectedAnswers[index] !== q.correctAnswer) {
+                hasIncorrectAnswers = true;
+                doc.setFont("helvetica", "bold");
+                doc.text(`${index + 1}. ${q.question}`, 10, y);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Your Answer: ${selectedAnswers[index] || "Not Answered"}`, 10, y + 10);
+                doc.text(`Correct Answer: ${q.correctAnswer}`, 10, y + 20);
+
                 doc.setTextColor(255, 0, 0);
                 doc.text("✘ Incorrect", 150, y + 10);
+                doc.setTextColor(0, 0, 0);
+
+                y += 30;
             }
-            doc.setTextColor(0, 0, 0);
-            y += 30;
         });
 
-        doc.save("Test_Results.pdf");
+        if (!hasIncorrectAnswers) {
+            doc.setFont("helvetica", "bold");
+            doc.text("Great job! No incorrect answers!", 10, y);
+        }
+
+        doc.save("Test_Results_Incorrect_Answers.pdf");
     }
 
     startButton.addEventListener('click', () => {
