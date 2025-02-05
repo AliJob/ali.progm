@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     emailjs.init("YVG_87gJlzZuy3NtW"); // ВАШ EmailJS Public Key
 
@@ -22,6 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
+    // Функция для перемешивания массива вариантов ответов
+    function shuffleQuestionOptions(question) {
+        shuffleArray(question.options);
+    }
+
     function startTimer() {
         time = 10;
         timeElement.textContent = time;
@@ -41,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         startTimer();
 
         const currentQuestion = questions[currentQuestionIndex];
+        shuffleQuestionOptions(currentQuestion);  // Перемешиваем варианты ответа
+
         questionElement.textContent = currentQuestion.question;
 
         optionsElement.innerHTML = '';
