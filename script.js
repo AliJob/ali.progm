@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize EmailJS
-    emailjs.init("service_6qqeibt"); 
+    emailjs.init("YVG_87gJlzZuy3NtW"); 
 
     let currentQuestionIndex = 0;
     let time = 10;
@@ -8,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let correctAnswers = 0;
     let selectedAnswers = [];
 
-    // DOM элементы
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -20,12 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultContainer = document.getElementById('result');
     const resultCorrectElement = document.getElementById('correct-answers');
     const resultFullname = document.getElementById('result-fullname');
-    const reviewButton = document.getElementById('review-button');
-    const reviewContainer = document.getElementById('review-container');
+    const resultButton = document.getElementById('download-button');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    // Функция таймера для каждого вопроса
     function startTimer() {
         time = 10;
         timeElement.textContent = time;
@@ -40,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    // Функция отображения вопроса
     function showQuestion() {
         clearInterval(timerInterval);
         startTimer();
@@ -57,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Функция обработки выбранного ответа
     function selectAnswer(selectedOption) {
         clearInterval(timerInterval);
         const currentQuestion = questions[currentQuestionIndex];
@@ -69,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         nextQuestion();
     }
 
-    // Переход к следующему вопросу или отображение результатов
     function nextQuestion() {
         currentQuestionIndex++;
         if (currentQuestionIndex < questions.length) {
@@ -79,64 +72,70 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Функция отображения результатов теста
     function showResult() {
         questionContainer.style.display = 'none';
         resultContainer.style.display = 'block';
         resultFullname.textContent = fullnameInput.value;
-        resultCorrectElement.textContent = correctAnswers; 
-        reviewButton.style.display = 'block';
+        resultCorrectElement.textContent = correctAnswers;
+        resultButton.style.display = 'block';
 
-        // Отправляем результаты теста по email
         sendTestResults();
     }
 
-    // Функция отправки результатов теста через EmailJS
     function sendTestResults() {
-        const fullname = fullnameInput.value;
-        const email = emailInput.value;
         const templateParams = {
-            fullname: fullname,
-            email: email,
+            fullname: fullnameInput.value,
+            email: emailInput.value,
             correctAnswers: correctAnswers
         };
 
-       
-        emailjs.send("service_6qqeibt", "template_wmbckja", templateParams)
-            .then(function(response) {
-                console.log('SUCCESS!', response.status, response.text);
-                // Можно добавить уведомление для пользователя об успешной отправке письма
-            }, function(error) {
-                console.error('FAILED...', error);
-                // Обработка ошибок отправки
-            });
+        emailjs.send("service_6qqeibt", "template_wmbckja", templateParams, "YVG_87gJlzZuy3NtW")
+        .then(response => console.log('SUCCESS!', response.status, response.text))
+        .catch(error => console.error('FAILED...', error));
     }
 
-    // Обработчик кнопки просмотра результатов теста (ревью)
-    reviewButton.addEventListener('click', () => {
-        resultContainer.style.display = 'none';
-        showReview();
-    });
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-    // Функция для отображения ревью теста
-    function showReview() {
-        reviewContainer.innerHTML = '';
-        questions.forEach((question, index) => {
-            const questionDiv = document.createElement('div');
-            questionDiv.classList.add('no-copy');
-            questionDiv.innerHTML = `
-                <p><strong>${question.question}</strong></p>
-                <p>Your answer: ${selectedAnswers[index] || 'Not answered'}</p>
-                <p>Correct answer: ${question.correctAnswer}</p>
-            `;
-            reviewContainer.appendChild(questionDiv);
+        let fullName = fullnameInput.value;
+        let email = emailInput.value;
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.text("English Test Results", 10, 20);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        doc.text(`Full Name: ${fullName}`, 10, 30);
+        doc.text(`Email: ${email}`, 10, 40);
+        doc.text(`Correct Answers: ${correctAnswers} / ${questions.length}`, 10, 50);
+        doc.text(`Incorrect Answers: ${questions.length - correctAnswers}`, 10, 60);
+        
+        let y = 80;
+        questions.forEach((q, index) => {
+            doc.setFont("helvetica", "bold");
+            doc.text(`${index + 1}. ${q.question}`, 10, y);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Your Answer: ${selectedAnswers[index] || "Not Answered"}`, 10, y + 10);
+            doc.text(`Correct Answer: ${q.correctAnswer}`, 10, y + 20);
+
+            if (selectedAnswers[index] === q.correctAnswer) {
+                doc.setTextColor(0, 128, 0);
+                doc.text("✔ Correct", 150, y + 10);
+            } else {
+                doc.setTextColor(255, 0, 0);
+                doc.text("✘ Incorrect", 150, y + 10);
+            }
+            doc.setTextColor(0, 0, 0);
+            y += 30;
         });
-        reviewContainer.style.display = 'block';
+
+        doc.save("Test_Results.pdf");
     }
 
-    // Запуск теста при клике на кнопку "Start Test"
     startButton.addEventListener('click', () => {
-        if (fullnameInput.value.trim() === "" || emailInput.value.trim() === "") {
+        if (!fullnameInput.value || !emailInput.value) {
             alert("Please enter both your full name and email!");
             return;
         }
@@ -144,10 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
         infoWindow.style.display = 'block';
     });
 
-    // Обработчик для перехода к вопросам после окна с инструкциями
     okButton.addEventListener('click', () => {
         infoWindow.style.display = 'none';
         questionContainer.style.display = 'block';
         showQuestion();
     });
+
+    resultButton.addEventListener('click', downloadPDF);
 });
