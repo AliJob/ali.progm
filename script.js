@@ -1,53 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize EmailJS
-    emailjs.init("YOUR_USER_ID"); // Replace with your actual User ID from EmailJS
-
-    const questions = [
-        {
-            question: "George is ................ than Nick.",
-            options: ["tall", "taller", "tallest"],
-            correctAnswer: "taller"
-        },
-        {
-            question: "What time ..... Calais tomorrow afternoon?",
-            options: ["do the ferry reach", "is the ferry reaching", "does the ferry reach"],
-            correctAnswer: "does the ferry reach"
-        },
-        {
-            question: "My friend ..................... lives in Australia is a nurse.",
-            options: ["who", "which", "whose"],
-            correctAnswer: "who"
-        },
-        {
-            question: "I like walking in the park ............. hot days.",
-            options: ["at", "on", "in"],
-            correctAnswer: "in"
-        },
-        {
-            question: "Centuries ago, people .......... animals for food.",
-            options: ["transport", "played", "hunted"],
-            correctAnswer: "hunted"
-        },
-        {
-            question: "If he ................... the lottery, he'll go on a round-the-world trip",
-            options: ["won", "wins", "will win"],
-            correctAnswer: "wins"
-        },
-        {
-            question: "Who is the president of USA?",
-            options: ["Barak Obama", "Donald Trump", "Ali Jobirov", "Joe Biden"],
-            correctAnswer: "Ali Jobirov"
-        },
-    ];
+    emailjs.init("service_6qqeibt"); 
 
     let currentQuestionIndex = 0;
     let time = 10;
     let timerInterval;
     let correctAnswers = 0;
     let selectedAnswers = [];
-    let userEmail = '';
 
-    // DOM elements
+    // DOM элементы
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -64,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
+    // Функция таймера для каждого вопроса
     function startTimer() {
         time = 10;
         timeElement.textContent = time;
@@ -78,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
+    // Функция отображения вопроса
     function showQuestion() {
         clearInterval(timerInterval);
         startTimer();
@@ -94,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Функция обработки выбранного ответа
     function selectAnswer(selectedOption) {
         clearInterval(timerInterval);
         const currentQuestion = questions[currentQuestionIndex];
@@ -105,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextQuestion();
     }
 
+    // Переход к следующему вопросу или отображение результатов
     function nextQuestion() {
         currentQuestionIndex++;
         if (currentQuestionIndex < questions.length) {
@@ -114,20 +79,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Функция отображения результатов теста
     function showResult() {
         questionContainer.style.display = 'none';
         resultContainer.style.display = 'block';
         resultFullname.textContent = fullnameInput.value;
         resultCorrectElement.textContent = correctAnswers; 
-
         reviewButton.style.display = 'block';
+
+        // Отправляем результаты теста по email
+        sendTestResults();
     }
 
+    // Функция отправки результатов теста через EmailJS
+    function sendTestResults() {
+        const fullname = fullnameInput.value;
+        const email = emailInput.value;
+        const templateParams = {
+            fullname: fullname,
+            email: email,
+            correctAnswers: correctAnswers
+        };
+
+       
+        emailjs.send("service_6qqeibt", "template_wmbckja", templateParams)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                // Можно добавить уведомление для пользователя об успешной отправке письма
+            }, function(error) {
+                console.error('FAILED...', error);
+                // Обработка ошибок отправки
+            });
+    }
+
+    // Обработчик кнопки просмотра результатов теста (ревью)
     reviewButton.addEventListener('click', () => {
         resultContainer.style.display = 'none';
         showReview();
     });
 
+    // Функция для отображения ревью теста
     function showReview() {
         reviewContainer.innerHTML = '';
         questions.forEach((question, index) => {
@@ -143,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewContainer.style.display = 'block';
     }
 
+    // Запуск теста при клике на кнопку "Start Test"
     startButton.addEventListener('click', () => {
         if (fullnameInput.value.trim() === "" || emailInput.value.trim() === "") {
             alert("Please enter both your full name and email!");
@@ -152,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         infoWindow.style.display = 'block';
     });
 
+    // Обработчик для перехода к вопросам после окна с инструкциями
     okButton.addEventListener('click', () => {
         infoWindow.style.display = 'none';
         questionContainer.style.display = 'block';
