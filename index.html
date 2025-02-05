@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>English Test</title>
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script> <!-- EmailJS -->
 </head>
 <body>
 
-    <!-- Intro Section -->
+    <!-- Ввод имени и email -->
     <div id="intro" class="container">
         <h2>Welcome to the English Test</h2>
-        <label for="fullname"></label>
         <input type="text" id="fullname" placeholder="Enter your full name" required>
-        <label for="email"></label>
         <input type="email" id="email" placeholder="Enter your email" required>
         <button id="start-button">Start Test</button>
     </div>
 
-    <!-- Test Instructions Window -->
+    <!-- Инструкции перед тестом -->
     <div id="info-window" style="display: none;" class="container">
         <h2>Test Instructions</h2>
         <p>The test consists of <strong>10 questions</strong>. Each question must be answered within <strong>10 seconds</strong>. 
@@ -27,25 +25,27 @@
         <button id="ok-button">OK</button>
     </div>
 
-    <!-- Test Question Section -->
+    <!-- Блок с вопросами -->
     <div id="question-container" style="display: none;" class="container">
         <h2 id="question"></h2>
         <div id="options"></div>
         <p>Time: <span id="time">10</span> seconds</p>
     </div>
 
-    <!-- Test Result Section -->
+    <!-- Итоговые результаты -->
     <div id="result" style="display: none;" class="container">
         <h3>Test Result</h3>
         <p id="result-fullname"></p>
-        <p id="result-correct">Correct Answers: <span id="correct-answers"></span></p>
+        <p>Correct Answers: <span id="correct-answers"></span></p>
         <button id="review-button" style="display: none;">Review Test</button>
+        <button id="download-button" style="display: none;">Download Result</button>
     </div>
 
-    <!-- Review Section -->
-    <div id="review-container" style="display: none;"></div>
+    <!-- Блок для просмотра ответов -->
+    <div id="review-container" style="display: none;" class="container"></div>
 
-    <script src="questions.js"></script> <!-- Подключение файла с вопросами -->
+    <script src="questions.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
