@@ -116,27 +116,31 @@ document.addEventListener('DOMContentLoaded', () => {
         let hasIncorrectAnswers = false;
 
         questions.forEach((q, index) => {
-            if (selectedAnswers[index] !== q.correctAnswer) {
-                hasIncorrectAnswers = true;
-                doc.setFont("helvetica", "bold");
-                doc.text(`${index + 1}. ${q.question}`, 10, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(`Your Answer: ${selectedAnswers[index] || "Not Answered"}`, 10, y + 10);
-
-                // Строка с правильным ответом удалена
-
-                doc.setTextColor(255, 0, 0);
-                doc.text("✘ Incorrect", 150, y + 10);
-                doc.setTextColor(0, 0, 0);
-
-                y += 30;
-            }
-        });
-
-        if (!hasIncorrectAnswers) {
             doc.setFont("helvetica", "bold");
-            doc.text("Great job! No incorrect answers!", 10, y);
-        }
+            doc.text(`${index + 1}. ${q.question}`, 10, y);
+            y += 10;
+
+            q.options.forEach((option, optionIndex) => {
+                doc.setFont("helvetica", "normal");
+                doc.text(`${option}`, 10, y);
+                y += 5;
+            });
+
+            const userAnswer = selectedAnswers[index] || "Not Answered";
+            doc.text(`Your Answer: ${userAnswer}`, 10, y);
+
+            // Указание, правильно ли выбран ответ
+            if (selectedAnswers[index] === q.correctAnswer) {
+                doc.setTextColor(0, 255, 0); // Зеленый для правильного ответа
+                doc.text("✔ Correct", 150, y);
+                doc.setTextColor(0, 0, 0); // Возвращаем цвет текста
+            } else {
+                doc.setTextColor(255, 0, 0); // Красный для неправильного ответа
+                doc.text("✘ Incorrect", 150, y);
+                doc.setTextColor(0, 0, 0); // Возвращаем цвет текста
+            }
+            y += 15;
+        });
 
         doc.save("Test_Results.pdf");
     }
