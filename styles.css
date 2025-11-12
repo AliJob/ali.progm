@@ -5,143 +5,74 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-size: 16px; /* Базовый размер шрифта */
-    background-image: url(artistic-blurry-colorful-wallpaper-background_58702-8158.avif); /* Путь к вашей картинке */
+    font-size: 16px;
+    background-image: url(artistic-blurry-colorful-wallpaper-background_58702-8158.avif);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    padding: 10px; /* Отступы для предотвращения прилипания контента к краям */
-    
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
-    -ms-user-select: none; 
-    user-select: none; 
+    padding: 10px;
 }
 
 .container {
     background: white;
-    padding: 20px; /* Базовые отступы */
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Контейнер занимает всю ширину */
-    max-width: 600px; /* Ограничение ширины на больших экранах */
-    box-sizing: border-box; /* Включаем отступы в размер контейнера */
-    transition: all 0.3s ease; /* Плавный переход стилей */
+    width: 100%;
+    max-width: 600px;
     display: flex;
-    flex-direction: column; /* Выравниваем элементы по вертикали */
-    align-items: center; /* Центрируем элементы по горизонтали */
+    flex-direction: column;
+    align-items: center;
 }
 
 h2 {
     text-align: center;
-    font-size: 22px; /* Размер заголовка по умолчанию */
+    font-size: 22px;
     margin-bottom: 20px;
 }
 
-label {
-    font-weight: bold;
-    margin-top: 5px; /* Отступ сверху */
-    margin-bottom: 5px; /* Отступ снизу */
-}
-
 input {
-    width: 70%; /* Поля ввода занимают всю ширину контейнера */
+    width: 70%;
     padding: 10px;
-    margin: 0px 0; /* Добавляем отступы между полями ввода */
+    margin: 8px 0;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Учитываем padding в размере */
 }
 
 button {
-    display: block;
-    width: 70%; /* Кнопки растягиваются на всю ширину контейнера */
+    width: 70%;
     margin: 10px 0;
-    font-size: 16px; /* Размер шрифта кнопок */
+    font-size: 16px;
     padding: 12px;
     border: none;
     border-radius: 4px;
-    background-color: #1da1f2; /* Основной цвет кнопок */
+    background-color: #1da1f2;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Плавный эффект при наведении */
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3; /* Цвет кнопки при наведении */
+    background-color: #0056b3;
 }
 
 #options {
     display: flex;
-    flex-direction: column; /* Выровнять варианты по вертикали */
-    align-items: center; /* Центрировать варианты по горизонтали */
-    width: 100%; /* Занимает всю ширину контейнера */
-    margin-top: 20px; /* Отступ сверху */
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
 }
 
 #options button {
-    width: 80%; /* Уменьшаем ширину кнопок для вариантов */
-    margin: 10px 0; /* Отступы между кнопками */
+    width: 80%;
+    margin: 10px 0;
 }
 
 @media (min-width: 779px) {
-    body {
-        font-size: 20px; /* Еще больше увеличиваем базовый шрифт */
-        background-position: top; /* Смещаем фон вверх для ноутбуков */
-    }
-
-    .container {
-        max-width: 800px; /* Увеличиваем ширину контейнера еще больше */
-        padding: 50px; /* Добавляем больше отступов внутри контейнера */
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); /* Усиливаем тень для акцента */
-    }
-
-    h2 {
-        font-size: 32px; /* Увеличиваем размер заголовка */
-        margin-bottom: 30px; /* Увеличиваем отступ ниже заголовка */
-    }
-
-    button {
-        font-size: 20px; /* Увеличиваем размер шрифта кнопок */
-        padding: 18px; /* Увеличиваем высоту кнопок */
-        border-radius: 6px; /* Увеличиваем закругления кнопок */
-    }
-
-    button:hover {
-        background-color: #003d99; /* Темнее цвет кнопки при наведении */
-    }
+    body { font-size: 20px; }
+    .container { max-width: 800px; padding: 50px; }
+    h2 { font-size: 32px; margin-bottom: 30px; }
+    button { font-size: 20px; padding: 18px; border-radius: 6px; }
 }
-
-@media (max-width: 768px) {
-    h2 {
-        font-size: 20px; /* Уменьшаем заголовок на телефонах */
-    }
-
-    button {
-        font-size: 14px; /* Уменьшаем размер шрифта кнопок */
-        padding: 10px; /* Уменьшаем высоту кнопок */
-    }
-
-    .container {
-        padding: 15px; /* Сужаем отступы в контейнере */
-    }
-}
-
-/* 🔐 Стили для блокировки копирования */
-.no-copy {
-    user-select: none;       /* Запрет выделения текста */
-    pointer-events: none;    /* Запрет нажатия мышкой */
-}
-.hide-on-screenshot {
-    background-color: black !important; 
-    color: black !important; 
-}
-
-.screenshot-block * {
-    background-color: black !important;
-    color: black !important;
-    pointer-events: none;
-    user-select: none;
-}
-
