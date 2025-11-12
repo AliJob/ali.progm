@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySAYx50S_nHeTQPQeppmESv87WyAisuVPW_0JD88IWq5xjLMePhIP3WY3PjrH7CSY1/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjNs7pGs06MC9kvkn1kj5fbQTCv1sLRJUOAEOjjSLHR2k6WGPeg6uD7oET78woET4g/exec";
 
     // Обновляем инструкции чтобы отражать реальное количество вопросов
     document.querySelector('#info-window p').innerHTML = 
@@ -91,42 +91,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
    function sendToGoogleSheet() {
-    const formData = new FormData();
-    formData.append("fullname", fullnameInput.value);
-    formData.append("email", emailInput.value);
-    formData.append("correctAnswers", correctAnswers.toString());
-    formData.append("totalQuestions", questions.length.toString());
+    const data = {
+        fullname: fullnameInput.value,
+        email: emailInput.value,
+        correctAnswers: correctAnswers.toString(),
+        totalQuestions: questions.length.toString()
+    };
 
     fetch(SCRIPT_URL, {
         method: "POST",
-        body: formData
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
     })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return res.text();
-    })
+    .then(res => res.json())
     .then(response => {
-        console.log('Success:', response);
-        try {
-            const data = JSON.parse(response);
-            if (data.status === "success") {
-                alert("✅ Results successfully sent!");
-            } else {
-                alert("⚠️ " + data.message);
+        if (response.status === "success") {
+            alert("✅ Results successfully sent!");
+            if (response.spreadsheetUrl) {
+                console.log("New spreadsheet created:", response.spreadsheetUrl);
             }
-        } catch (e) {
-            console.log('Raw response:', response);
-            alert("✅ Results sent!");
+        } else {
+            alert("⚠️ Error: " + response.message);
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        alert("⚠️ Error sending data: " + err.message);
+        alert("⚠️ Network error: " + err.message);
     });
 }
-
     
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
