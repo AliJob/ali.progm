@@ -19,8 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    // ВАЖНО: Замените на ваш актуальный URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXBo6mY37Jvntmo02qGNga7GXC5QkEIgnby8HK_kxrvxjuCBjM4KVJu1qwv4kBTUIV2Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo1rq4XI0Z9qDA8Y2OKNAUhRHJKvoBid_oBZB9lVBEpiYVp6UFF9nyzoVLrHS0k5mu4g/exec";
 
     // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
