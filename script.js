@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGk9ih6noyArM9yiVstMQv0olb15mzR66M7Q6Yjh86GYOqUKeicSxUsK8C3Snd4AbQAA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHIKcpp22AAADBvMvkCDO_PuW4t7yiTV1bX6hR2CDA4xb2mPxCLwsvzITnJieeM0Vucg/exec";
+
+    // Обновляем инструкции чтобы отражать реальное количество вопросов
+    document.querySelector('#info-window p').innerHTML = 
+        `The test consists of <strong>${questions.length} questions</strong>. Each question must be answered within <strong>10 seconds</strong>.`;
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startTimer();
 
         const currentQuestion = questions[currentQuestionIndex];
-        questionElement.textContent = currentQuestion.question;
+        questionElement.textContent = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
 
         optionsElement.innerHTML = '';
         const shuffledOptions = [...currentQuestion.options];
@@ -72,56 +76,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function nextQuestion() {
         currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) showQuestion();
-        else showResult();
+        if (currentQuestionIndex < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
     }
 
     function showResult() {
         questionContainer.style.display = 'none';
         resultContainer.style.display = 'block';
-        resultFullname.textContent = fullnameInput.value;
-        resultCorrectElement.textContent = correctAnswers;
+        resultFullname.textContent = `Student: ${fullnameInput.value}`;
+        resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
     }
 
-    // Отправляем данные в Google Sheets
-   function sendToGoogleSheet() {
-    const formData = new FormData();
-    formData.append("fullname", fullnameInput.value);
-    formData.append("email", emailInput.value);
-    formData.append("correctAnswers", correctAnswers.toString());
-    formData.append("totalQuestions", questions.length.toString());
+    function sendToGoogleSheet() {
+        const formData = new FormData();
+        formData.append("fullname", fullnameInput.value);
+        formData.append("email", emailInput.value);
+        formData.append("correctAnswers", correctAnswers.toString());
+        formData.append("totalQuestions", questions.length.toString());
 
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return res.text();
-    })
-    .then(response => {
-        console.log('Success:', response);
-        try {
-            const data = JSON.parse(response);
-            if (data.status === "success") {
-                alert("✅ Results successfully sent!");
-            } else {
-                alert("⚠️ " + data.message);
-            }
-        } catch (e) {
-            console.log('Raw response:', response);
-            alert("✅ Results sent!");
-        }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        alert("⚠️ Error sending data: " + err.message);
-    });
-}
-
-
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.text())
+        .then(response => {
+            console.log(response);
+            alert("✅ Results successfully sent!");
+        })
+        .catch(err => {
+            console.error(err);
+            alert("⚠️ Error sending data.");
+        });
+    }
 
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
