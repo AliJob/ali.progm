@@ -50,12 +50,12 @@ const questions = [
         correctAnswer: "beer"
     },
     {
-        question: "“Reject” means?",
+        question: "Reject means?",
         options: ["turn back", "turn in", "turn down"],
         correctAnswer: "turn down"
     },
     {
-        question: "What lexical unit doesn’t belong to the Italian language?",
+        question: "What lexical unit doesn't belong to the Italian language?",
         options: ["felicita", "oronero", "navidad"],
         correctAnswer: "navidad"
     },
@@ -74,7 +74,6 @@ const questions = [
         options: ["Switzerland", "Italy", "France"],
         correctAnswer: "France"
     },
-
     {
         question: "Mageiricophobia is the fear of what?",
         options: ["cooking", "dancing", "drawing"],
@@ -82,7 +81,7 @@ const questions = [
     },
     {
         question: "What is the world's warmest sea?",
-        options: ["The Adriatic Sea", "The Red Sea", "Thе Black Sea"],
+        options: ["The Adriatic Sea", "The Red Sea", "The Black Sea"],
         correctAnswer: "The Red Sea"
     },
     {
@@ -91,24 +90,24 @@ const questions = [
         correctAnswer: "curtains in theatre"
     },
     {
-        question: "What`s Lenin Peak?",
+        question: "What's Lenin Peak?",
         options: ["a monument in Central Asia", "the name of street in Tajikistan", "a majestic mountain in the Pamir Mountains"],
         correctAnswer: "a majestic mountain in the Pamir Mountains"
     },
     {
         question: "Who discovered the laws of gravity, motion, invented calculus?",
-        options: ["Plato?", "Isaac Newton", "Aristotle"],
+        options: ["Plato", "Isaac Newton", "Aristotle"],
         correctAnswer: "Isaac Newton"
     },
     {
-        question: "The initials pc on a medicine means it should be taken when…?",
-        options: [" after meals", " the past century", "post surgery state"],
+        question: "The initials pc on a medicine means it should be taken when?",
+        options: ["after meals", "the past century", "post surgery state"],
         correctAnswer: "after meals"
     },
     {
-        question: "Schubert always slept with what on…?",
-        options: ["on his desk", "spectacles -  he-in case he got idea", "on the floor"],
-        correctAnswer: "spectacles -  he-in case he got idea"
+        question: "Schubert always slept with what on?",
+        options: ["on his desk", "spectacles - in case he got idea", "on the floor"],
+        correctAnswer: "spectacles - in case he got idea"
     },
     {
         question: "Which country had the first women MPs 19 in 1907?",
@@ -122,12 +121,12 @@ const questions = [
     },
     {
         question: "Cleopatra sometimes wore a fake what?",
-        options: ["wig for official duties", "arm for official duties", "beard for official dutues"],
-        correctAnswer: "beard for official dutues"
+        options: ["wig for official duties", "arm for official duties", "beard for official duties"],
+        correctAnswer: "beard for official duties"
     },
     {
         question: "When was abolished serfdom in Russia?",
-        options: ["on March 3, 1861", "On March 7, 1861", "On March 13,  1861"],
+        options: ["on March 3, 1861", "On March 7, 1861", "On March 13, 1861"],
         correctAnswer: "on March 3, 1861"
     },
     {
@@ -150,5 +149,4 @@ const questions = [
         options: ["a house elf", "a babysitter", "a magic stone"],
         correctAnswer: "a house elf"
     }
-
 ];
