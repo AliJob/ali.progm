@@ -90,35 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
     }
 
-    function sendToGoogleSheet() {
-    const data = {
-        fullname: fullnameInput.value,
-        email: emailInput.value,
-        correctAnswers: correctAnswers.toString(),
-        totalQuestions: questions.length.toString()
-    };
-
-    console.log("Sending data:", data);
+   function sendToGoogleSheet() {
+    const formData = new FormData();
+    formData.append("fullname", fullnameInput.value);
+    formData.append("email", emailInput.value);
+    formData.append("correctAnswers", correctAnswers.toString());
+    formData.append("totalQuestions", questions.length.toString());
 
     fetch(SCRIPT_URL, {
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
+        body: formData
     })
     .then(res => {
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
-        return res.json();
+        return res.text();
     })
     .then(response => {
         console.log('Success:', response);
-        if (response.status === "success") {
-            alert("✅ Results successfully sent!");
-        } else {
-            alert("⚠️ " + response.message);
+        try {
+            const data = JSON.parse(response);
+            if (data.status === "success") {
+                alert("✅ Results successfully sent!");
+            } else {
+                alert("⚠️ " + data.message);
+            }
+        } catch (e) {
+            console.log('Raw response:', response);
+            alert("✅ Results sent!");
         }
     })
     .catch(err => {
