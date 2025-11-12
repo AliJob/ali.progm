@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let time = 10;
     let timerInterval;
     let correctAnswers = 0;
+    let testCompleted = false;
+
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -19,11 +21,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo1rq4XI0Z9qDA8Y2OKNAUhRHJKvoBid_oBZB9lVBEpiYVp6UFF9nyzoVLrHS0k5mu4g/exec";
+    
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGdOYR3BVR1__wvLqAbqVkYmMH4icpqb76dGBo50PYlPOq-TNKuAgfR_EIc66dx_X1/exec";
 
     // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
         `The test consists of <strong>${questions.length} questions</strong>. Each question must be answered within <strong>10 seconds</strong>.`;
+
+    // Проверка: уже проходил?
+    function checkIfAlreadyTaken() {
+        const savedEmail = localStorage.getItem('englishTestEmail');
+        const savedScore = localStorage.getItem('englishTestScore');
+        const savedDate = localStorage.getItem('englishTestDate');
+
+        if (savedEmail && savedScore) {
+            introContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+            resultFullname.textContent = `Student: ${savedEmail}`;
+            resultCorrectElement.textContent = `${savedScore} out of ${questions.length}`;
+            doneButton.disabled = true;
+            doneButton.textContent = 'Already Taken';
+            alert(`You already took the test!\nScore: ${savedScore}/${questions.length}\nDate: ${savedDate}`);
+            return true;
+        }
+        return false;
+    }
+
+    // Сохранить результат локально
+    function saveTestResult() {
+        localStorage.setItem('englishTestEmail', fullnameInput.value.trim());
+        localStorage.setItem('englishTestScore', correctAnswers);
+        localStorage.setItem('englishTestDate', new Date().toLocaleDateString());
+    }
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -82,44 +111,64 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.style.display = 'block';
         resultFullname.textContent = `Student: ${fullnameInput.value}`;
         resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
+        doneButton.disabled = false;
+        doneButton.textContent = 'Done';
     }
 
-   // script.js (в sendToGoogleSheet)
-function sendToGoogleSheet() {
-    const data = {
-        fullname: fullnameInput.value.trim(),
-        email: emailInput.value.trim(),
-        correctAnswers: correctAnswers.toString(),
-        totalQuestions: questions.length.toString()
-    };
+    function sendToGoogleSheet() {
+        if (testCompleted) {
+            alert('Results already sent!');
+            return;
+        }
 
-    console.log('Sending:', data);
+        doneButton.disabled = true;
+        doneButton.textContent = 'Sending...';
 
-    // Используем FormData + no-cors
-    const formData = new FormData();
-    for (const key in data) {
-        formData.append(key, data[key]);
+        const data = {
+            fullname: fullnameInput.value.trim(),
+            email: emailInput.value.trim(),
+            correctAnswers: correctAnswers.toString(),
+            totalQuestions: questions.length.toString()
+        };
+
+        console.log('Sending:', data);
+
+        const formData = new FormData();
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+        })
+        .then(() => {
+            alert('Results sent successfully!');
+            doneButton.textContent = 'Sent!';
+            saveTestResult();
+            testCompleted = true;
+        })
+        .catch(err => {
+            console.error('Send failed:', err);
+            alert('Failed to send. Try again.');
+            doneButton.disabled = false;
+            doneButton.textContent = 'Done';
+        });
     }
 
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',  // Без этого — CORS блок
-        body: formData
-    })
-    .then(() => {
-        alert('Results sent successfully!');
-    })
-    .catch(err => {
-        console.error('Send failed:', err);
-        alert('Failed to send. Check internet connection.');
-    });
-}
-
+    // === СТАРТ ===
     startButton.addEventListener('click', () => {
-        if (!fullnameInput.value.trim() || !emailInput.value.trim()) {
+        const fullname = fullnameInput.value.trim();
+        const email = emailInput.value.trim();
+
+        if (!fullname || !email) {
             alert("Please enter both your full name and email!");
             return;
         }
+
+        if (checkIfAlreadyTaken()) return;
+
         introContainer.style.display = 'none';
         infoWindow.style.display = 'block';
     });
@@ -131,4 +180,9 @@ function sendToGoogleSheet() {
     });
 
     doneButton.addEventListener('click', sendToGoogleSheet);
+
+    // Проверка при загрузке
+    if (checkIfAlreadyTaken()) {
+        // Уже проходил
+    }
 });
