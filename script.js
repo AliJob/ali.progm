@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHIKcpp22AAADBvMvkCDO_PuW4t7yiTV1bX6hR2CDA4xb2mPxCLwsvzITnJieeM0Vucg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGk9ih6noyArM9yiVstMQv0olb15mzR66M7Q6Yjh86GYOqUKeicSxUsK8C3Snd4AbQAA/exec";
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -88,21 +88,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const formData = new FormData();
     formData.append("fullname", fullnameInput.value);
     formData.append("email", emailInput.value);
-    formData.append("correctAnswers", correctAnswers);
-    formData.append("totalQuestions", questions.length);
+    formData.append("correctAnswers", correctAnswers.toString());
+    formData.append("totalQuestions", questions.length.toString());
 
     fetch(SCRIPT_URL, {
         method: "POST",
         body: formData
     })
-    .then(res => res.text())
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.text();
+    })
     .then(response => {
-        console.log(response);
-        alert("✅ Results successfully sent!");
+        console.log('Success:', response);
+        try {
+            const data = JSON.parse(response);
+            if (data.status === "success") {
+                alert("✅ Results successfully sent!");
+            } else {
+                alert("⚠️ " + data.message);
+            }
+        } catch (e) {
+            console.log('Raw response:', response);
+            alert("✅ Results sent!");
+        }
     })
     .catch(err => {
-        console.error(err);
-        alert("⚠️ Error sending data.");
+        console.error('Error:', err);
+        alert("⚠️ Error sending data: " + err.message);
     });
 }
 
