@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    emailjs.init("YVG_87gJlzZuy3NtW"); // ВАШ EmailJS Public Key
-
     let currentQuestionIndex = 0;
     let time = 10;
     let timerInterval;
@@ -18,15 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultContainer = document.getElementById('result');
     const resultCorrectElement = document.getElementById('correct-answers');
     const resultFullname = document.getElementById('result-fullname');
-    const resultButton = document.getElementById('download-button');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    // Функция для случайного перемешивания массива
+    // 🔗 Вставь сюда URL из Google Apps Script
+    const scriptURL = "ВСТАВЬ_СЮДА_ТВОЙ_URL_ИЗ_APPS_SCRIPT";
+
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]]; // Меняем местами элементы
+            [array[i], array[j]] = [array[j], array[i]];
         }
     }
 
@@ -50,10 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const currentQuestion = questions[currentQuestionIndex];
         questionElement.textContent = currentQuestion.question;
-
         optionsElement.innerHTML = '';
 
-        // Сначала перемешиваем варианты ответов
         const shuffledOptions = [...currentQuestion.options];
         shuffleArray(shuffledOptions);
 
@@ -90,85 +87,40 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.style.display = 'block';
         resultFullname.textContent = fullnameInput.value;
         resultCorrectElement.textContent = correctAnswers;
-        resultButton.style.display = 'block';
-
         sendTestResults();
     }
 
+    // 📨 Отправляем результаты в Google Sheets
     function sendTestResults() {
-        const templateParams = {
+        const data = {
             fullname: fullnameInput.value,
             email: emailInput.value,
-            correctAnswers: correctAnswers
+            correctAnswers: correctAnswers,
+            totalQuestions: questions.length
         };
 
-        emailjs.send("service_6qqeibt", "template_wmbckja", templateParams, "YVG_87gJlzZuy3NtW")
-        .then(response => console.log('SUCCESS!', response.status, response.text))
-        .catch(error => console.error('FAILED...', error));
-    }
-
-    function downloadPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        let fullName = fullnameInput.value;
-        let email = emailInput.value;
-
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(16);
-        doc.text("Test Results", 10, 20);
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        doc.text(`Full Name: ${fullName}`, 10, 30);
-        doc.text(`Email: ${email}`, 10, 40);
-        doc.text(`Correct Answers: ${correctAnswers} / ${questions.length}`, 10, 50);
-        doc.text(`Incorrect Answers: ${questions.length - correctAnswers}`, 10, 60);
-
-        let y = 70;
-        const pageHeight = doc.internal.pageSize.height;
-
-        // Проверяем все вопросы
-        questions.forEach((q, index) => {
-            if (y + 30 > pageHeight) { // Переход на новую страницу, если не хватает места
-                doc.addPage();
-                y = 10;
-            }
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`${index + 1}. ${q.question}`, 10, y);
-            y += 10;
-
-            // Отображаем варианты ответов
-            q.options.forEach((option, optionIndex) => {
-                doc.setFont("helvetica", "normal");
-                doc.text(`${option}`, 10, y);
-                y += 5;
-            });
-
-            // Отображаем выбранный ответ
-            const userAnswer = selectedAnswers[index] || "Not Answered";
-            doc.text(`Your Answer: ${userAnswer}`, 10, y);
-
-            // Пометка "Правильно" или "Неправильно"
-            if (selectedAnswers[index] === q.correctAnswer) {
-                doc.setTextColor(0, 255, 0); // Зеленый для правильного ответа
-                doc.text("✔ Correct", 150, y);
-                doc.setTextColor(0, 0, 0);
+        fetch(scriptURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === "duplicate") {
+                alert("❗ Вы уже проходили этот тест. Повторное участие невозможно.");
+                location.reload();
             } else {
-                doc.setTextColor(255, 0, 0); // Красный для неправильного ответа
-                doc.text("✘ Incorrect", 150, y);
-                doc.setTextColor(0, 0, 0);
+                alert("✅ Ваш результат успешно отправлен!");
             }
-            y += 15;
+        })
+        .catch(error => {
+            console.error("Ошибка при отправке данных:", error);
         });
-
-        doc.save("Test_Results.pdf");
     }
 
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
-            alert("Please enter both your full name and email!");
+            alert("Пожалуйста, введите своё имя и email!");
             return;
         }
         introContainer.style.display = 'none';
@@ -180,6 +132,4 @@ document.addEventListener('DOMContentLoaded', () => {
         questionContainer.style.display = 'block';
         showQuestion();
     });
-
-    resultButton.addEventListener('click', downloadPDF);
 });
