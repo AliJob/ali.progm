@@ -85,37 +85,36 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
     }
 
-    function sendToGoogleSheet() {
-        const data = {
-            fullname: fullnameInput.value.trim(),
-            email: emailInput.value.trim(),
-            correctAnswers: correctAnswers.toString(),
-            totalQuestions: questions.length.toString()
-        };
+   // script.js (в sendToGoogleSheet)
+function sendToGoogleSheet() {
+    const data = {
+        fullname: fullnameInput.value.trim(),
+        email: emailInput.value.trim(),
+        correctAnswers: correctAnswers.toString(),
+        totalQuestions: questions.length.toString()
+    };
 
-        console.log('Sending to Google Sheets:', data);
+    console.log('Sending:', data);
 
-        // Используем mode: 'no-cors' + FormData для обхода CORS
-        const formData = new FormData();
-        for (const key in data) {
-            formData.append(key, data[key]);
-        }
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Важно!
-            body: formData
-        })
-        .then(() => {
-            // В no-cors режиме ответ недоступен, но запрос прошёл
-            alert('Results successfully sent!');
-            console.log('Data sent (no-cors mode)');
-        })
-        .catch(error => {
-            console.error('Send error:', error);
-            alert('Failed to send. Check internet and console.');
-        });
+    // Используем FormData + no-cors
+    const formData = new FormData();
+    for (const key in data) {
+        formData.append(key, data[key]);
     }
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',  // Без этого — CORS блок
+        body: formData
+    })
+    .then(() => {
+        alert('Results sent successfully!');
+    })
+    .catch(err => {
+        console.error('Send failed:', err);
+        alert('Failed to send. Check internet connection.');
+    });
+}
 
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value.trim() || !emailInput.value.trim()) {
