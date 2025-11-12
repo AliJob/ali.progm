@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHIKcpp22AAADBvMvkCDO_PuW4t7yiTV1bX6hR2CDA4xb2mPxCLwsvzITnJieeM0Vucg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyT91AW0gsVCbaMrGstG96tK5SMLM-MkJWr_SMuCjX38A7JDGRzr0iSZbSSmjqc3tzGFA/exec";
 
     // Обновляем инструкции чтобы отражать реальное количество вопросов
     document.querySelector('#info-window p').innerHTML = 
@@ -91,27 +91,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function sendToGoogleSheet() {
-        const formData = new FormData();
-        formData.append("fullname", fullnameInput.value);
-        formData.append("email", emailInput.value);
-        formData.append("correctAnswers", correctAnswers.toString());
-        formData.append("totalQuestions", questions.length.toString());
+    const data = {
+        fullname: fullnameInput.value,
+        email: emailInput.value,
+        correctAnswers: correctAnswers.toString(),
+        totalQuestions: questions.length.toString()
+    };
 
-        fetch(SCRIPT_URL, {
-            method: "POST",
-            body: formData
-        })
-        .then(res => res.text())
-        .then(response => {
-            console.log(response);
+    console.log("Sending data:", data);
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
+    })
+    .then(response => {
+        console.log('Success:', response);
+        if (response.status === "success") {
             alert("✅ Results successfully sent!");
-        })
-        .catch(err => {
-            console.error(err);
-            alert("⚠️ Error sending data.");
-        });
-    }
+        } else {
+            alert("⚠️ " + response.message);
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert("⚠️ Error sending data: " + err.message);
+    });
+}
 
+    
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
             alert("Please enter both your full name and email!");
