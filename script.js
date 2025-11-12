@@ -85,34 +85,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Отправляем данные в Google Sheets
     function sendToGoogleSheet() {
-        const data = {
-            fullname: fullnameInput.value,
-            email: emailInput.value,
-            correctAnswers: correctAnswers,
-            totalQuestions: questions.length
-        };
+    const formData = new FormData();
+    formData.append("fullname", fullnameInput.value);
+    formData.append("email", emailInput.value);
+    formData.append("correctAnswers", correctAnswers);
+    formData.append("totalQuestions", questions.length);
 
-        fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(response => {
-            console.log(response);
-            if (response.status === "duplicate") {
-                alert("❌ This email has already taken the test.");
-            } else if (response.status === "success") {
-                alert("✅ Results successfully sent!");
-            } else {
-                alert("⚠️ Something went wrong: " + (response.message || ""));
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("⚠️ Error sending data.");
-        });
-    }
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
+        console.log(response);
+        alert("✅ Results successfully sent!");
+    })
+    .catch(err => {
+        console.error(err);
+        alert("⚠️ Error sending data.");
+    });
+}
+
 
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
