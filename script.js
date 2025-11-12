@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjNs7pGs06MC9kvkn1kj5fbQTCv1sLRJUOAEOjjSLHR2k6WGPeg6uD7oET78woET4g/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMkzsTMDGy7VdhSAjqtcvY0vAevvqU_73nyL8ZNH52mZ0KYi3-nwyDj0Kgika40aRa/exec";
 
     // Обновляем инструкции чтобы отражать реальное количество вопросов
     document.querySelector('#info-window p').innerHTML = 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
     }
 
-   function sendToGoogleSheet() {
+  function sendToGoogleSheet() {
     const data = {
         fullname: fullnameInput.value,
         email: emailInput.value,
@@ -98,27 +98,39 @@ document.addEventListener('DOMContentLoaded', () => {
         totalQuestions: questions.length.toString()
     };
 
+    console.log('Sending data:', data);
+
+    // Добавляем обработку ошибок сети
     fetch(SCRIPT_URL, {
-        method: "POST",
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: 'no-cors' // Попробуйте этот режим если не работает
     })
-    .then(res => res.json())
     .then(response => {
-        if (response.status === "success") {
-            alert("✅ Results successfully sent!");
-            if (response.spreadsheetUrl) {
-                console.log("New spreadsheet created:", response.spreadsheetUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(result => {
+        console.log('Success:', result);
+        if (result.status === 'success') {
+            alert('✅ Results successfully sent!');
+            if (result.spreadsheetUrl) {
+                console.log('Spreadsheet URL:', result.spreadsheetUrl);
+                // Можно показать ссылку пользователю
+                // alert('Spreadsheet: ' + result.spreadsheetUrl);
             }
         } else {
-            alert("⚠️ Error: " + response.message);
+            alert('❌ Error: ' + result.message);
         }
     })
-    .catch(err => {
-        console.error('Error:', err);
-        alert("⚠️ Network error: " + err.message);
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('❌ Network error. Please check console for details.');
     });
 }
     
