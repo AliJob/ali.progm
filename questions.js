@@ -1,3 +1,4 @@
+// questions.js
 const questions = [
     {
         question: "Old Lyme Connecticut has a museum dedicated to?",
