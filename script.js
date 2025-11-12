@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Отправляем данные в Google Sheets
-    function sendToGoogleSheet() {
+   function sendToGoogleSheet() {
     const formData = new FormData();
     formData.append("fullname", fullnameInput.value);
     formData.append("email", emailInput.value);
@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("⚠️ Error sending data.");
     });
 }
+
 
 
     startButton.addEventListener('click', () => {
