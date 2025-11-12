@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const doneButton = document.getElementById('done-button');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMkzsTMDGy7VdhSAjqtcvY0vAevvqU_73nyL8ZNH52mZ0KYi3-nwyDj0Kgika40aRa/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0WpcBU32JxJIWXCdywpOh0mysFAsBWWoUKc6Hfo5xfulf8AFUfwsxo9-nj4oAhotH9A/exec";
     // Обновляем инструкции чтобы отражать реальное количество вопросов
     document.querySelector('#info-window p').innerHTML =
         `The test consists of <strong>${questions.length} questions</strong>. Each question must be answered within <strong>10 seconds</strong>.`;
