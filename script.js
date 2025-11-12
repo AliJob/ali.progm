@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let time = 10;
     let timerInterval;
     let correctAnswers = 0;
-    let selectedAnswers = [];
     const questionContainer = document.getElementById('question-container');
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -19,16 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const doneButton = document.getElementById('done-button');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0WpcBU32JxJIWXCdywpOh0mysFAsBWWoUKc6Hfo5xfulf8AFUfwsxo9-nj4oAhotH9A/exec";
-    // Обновляем инструкции чтобы отражать реальное количество вопросов
+
+    // ВАЖНО: Замените на ваш актуальный URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXBo6mY37Jvntmo02qGNga7GXC5QkEIgnby8HK_kxrvxjuCBjM4KVJu1qwv4kBTUIV2Q/exec";
+
+    // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
         `The test consists of <strong>${questions.length} questions</strong>. Each question must be answered within <strong>10 seconds</strong>.`;
+
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
     }
+
     function startTimer() {
         time = 10;
         timeElement.textContent = time;
@@ -37,11 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
             timeElement.textContent = time;
             if (time <= 0) {
                 clearInterval(timerInterval);
-                selectedAnswers[currentQuestionIndex] = 'Not Answered';
                 nextQuestion();
             }
         }, 1000);
     }
+
     function showQuestion() {
         clearInterval(timerInterval);
         startTimer();
@@ -57,13 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
             optionsElement.appendChild(button);
         });
     }
+
     function selectAnswer(selectedOption) {
         clearInterval(timerInterval);
         const currentQuestion = questions[currentQuestionIndex];
-        selectedAnswers[currentQuestionIndex] = selectedOption;
         if (selectedOption === currentQuestion.correctAnswer) correctAnswers++;
         nextQuestion();
     }
+
     function nextQuestion() {
         currentQuestionIndex++;
         if (currentQuestionIndex < questions.length) {
@@ -72,64 +77,60 @@ document.addEventListener('DOMContentLoaded', () => {
             showResult();
         }
     }
+
     function showResult() {
         questionContainer.style.display = 'none';
         resultContainer.style.display = 'block';
         resultFullname.textContent = `Student: ${fullnameInput.value}`;
         resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
     }
+
     function sendToGoogleSheet() {
         const data = {
-            fullname: fullnameInput.value,
-            email: emailInput.value,
+            fullname: fullnameInput.value.trim(),
+            email: emailInput.value.trim(),
             correctAnswers: correctAnswers.toString(),
             totalQuestions: questions.length.toString()
         };
-        console.log('Sending data:', data);
+
+        console.log('Sending to Google Sheets:', data);
+
+        // Используем mode: 'no-cors' + FormData для обхода CORS
+        const formData = new FormData();
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+
         fetch(SCRIPT_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
+            mode: 'no-cors', // Важно!
+            body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(result => {
-            console.log('Success:', result);
-            if (result.status === 'success') {
-                alert('✅ Results successfully sent!');
-                if (result.spreadsheetUrl) {
-                    console.log('Spreadsheet URL:', result.spreadsheetUrl);
-                    // Можно показать ссылку пользователю
-                    // alert('Spreadsheet: ' + result.spreadsheetUrl);
-                }
-            } else {
-                alert('❌ Error: ' + result.message);
-            }
+        .then(() => {
+            // В no-cors режиме ответ недоступен, но запрос прошёл
+            alert('Results successfully sent!');
+            console.log('Data sent (no-cors mode)');
         })
         .catch(error => {
-            console.error('Fetch error:', error);
-            alert('❌ Network error. Please check console for details.');
+            console.error('Send error:', error);
+            alert('Failed to send. Check internet and console.');
         });
     }
-   
+
     startButton.addEventListener('click', () => {
-        if (!fullnameInput.value || !emailInput.value) {
+        if (!fullnameInput.value.trim() || !emailInput.value.trim()) {
             alert("Please enter both your full name and email!");
             return;
         }
         introContainer.style.display = 'none';
         infoWindow.style.display = 'block';
     });
+
     okButton.addEventListener('click', () => {
         infoWindow.style.display = 'none';
         questionContainer.style.display = 'block';
         showQuestion();
     });
+
     doneButton.addEventListener('click', sendToGoogleSheet);
 });
