@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybuhqr3D3cXlggNLZpoqDuAM4zENwu2GlR4L_nOxwI5tjmNXUtox195fPoWbLKGfdMYw/exec"; // вставь свою ссылку!
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHIKcpp22AAADBvMvkCDO_PuW4t7yiTV1bX6hR2CDA4xb2mPxCLwsvzITnJieeM0Vucg/exec";
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
