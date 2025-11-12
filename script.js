@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyT91AW0gsVCbaMrGstG96tK5SMLM-MkJWr_SMuCjX38A7JDGRzr0iSZbSSmjqc3tzGFA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxUHRZ9giUUFU4G5FB6OE0zbveTQWsocImKiRPzAQ3xZf1-e6KtyDNXza_CfAIXdHFjDw/exec";
 
     // Обновляем инструкции чтобы отражать реальное количество вопросов
     document.querySelector('#info-window p').innerHTML = 
