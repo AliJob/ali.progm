@@ -90,33 +90,29 @@ document.addEventListener('DOMContentLoaded', () => {
         sendTestResults();
     }
 
-    // 📨 Отправляем результаты в Google Sheets
     function sendTestResults() {
-        const data = {
-            fullname: fullnameInput.value,
-            email: emailInput.value,
-            correctAnswers: correctAnswers,
-            totalQuestions: questions.length
-        };
+    const data = {
+        fullname: fullnameInput.value,
+        email: emailInput.value,
+        correctAnswers: correctAnswers,
+        totalQuestions: questions.length
+    };
 
-        fetch(scriptURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.status === "duplicate") {
-                alert("❗ Вы уже проходили этот тест. Повторное участие невозможно.");
-                location.reload();
-            } else {
-                alert("✅ Ваш результат успешно отправлен!");
-            }
-        })
-        .catch(error => {
-            console.error("Ошибка при отправке данных:", error);
-        });
-    }
+    fetch("ТВОЙ_ВЕБ_АДРЕС_СКРИПТА", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+        console.log("Response from Google Apps Script:", response);
+        if (response.status === "duplicate") {
+            alert("Этот email уже участвовал в тесте!");
+            location.reload();
+        }
+    })
+    .catch(err => console.error("Error:", err));
+}
 
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
