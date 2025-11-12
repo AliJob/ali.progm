@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultContainer = document.getElementById('result');
     const resultCorrectElement = document.getElementById('correct-answers');
     const resultFullname = document.getElementById('result-fullname');
+    const doneButton = document.getElementById('done-button');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
 
-    // 🔗 Вставь сюда URL из Google Apps Script
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxFzTMqDoTkSmYUK1BEDKQQBOZ8_T0F1mBHRPVpTcUJdQmLeyjdnV9us2JxFLTQxfWZAA/exec";
+    const SCRIPT_URL = "🔗 ВСТАВЬ_СЮДА_ССЫЛКУ_ИЗ_ТВОЕГО_Apps_Script"; // вставь свою ссылку!
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const currentQuestion = questions[currentQuestionIndex];
         questionElement.textContent = currentQuestion.question;
-        optionsElement.innerHTML = '';
 
+        optionsElement.innerHTML = '';
         const shuffledOptions = [...currentQuestion.options];
         shuffleArray(shuffledOptions);
 
@@ -66,20 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(timerInterval);
         const currentQuestion = questions[currentQuestionIndex];
         selectedAnswers[currentQuestionIndex] = selectedOption;
-
-        if (selectedOption === currentQuestion.correctAnswer) {
-            correctAnswers++;
-        }
+        if (selectedOption === currentQuestion.correctAnswer) correctAnswers++;
         nextQuestion();
     }
 
     function nextQuestion() {
         currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            showQuestion();
-        } else {
-            showResult();
-        }
+        if (currentQuestionIndex < questions.length) showQuestion();
+        else showResult();
     }
 
     function showResult() {
@@ -87,36 +81,42 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.style.display = 'block';
         resultFullname.textContent = fullnameInput.value;
         resultCorrectElement.textContent = correctAnswers;
-        sendTestResults();
     }
 
-    function sendTestResults() {
-    const data = {
-        fullname: fullnameInput.value,
-        email: emailInput.value,
-        correctAnswers: correctAnswers,
-        totalQuestions: questions.length
-    };
+    // Отправляем данные в Google Sheets
+    function sendToGoogleSheet() {
+        const data = {
+            fullname: fullnameInput.value,
+            email: emailInput.value,
+            correctAnswers: correctAnswers,
+            totalQuestions: questions.length
+        };
 
-    fetch("ТВОЙ_ВЕБ_АДРЕС_СКРИПТА", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(response => {
-        console.log("Response from Google Apps Script:", response);
-        if (response.status === "duplicate") {
-            alert("Этот email уже участвовал в тесте!");
-            location.reload();
-        }
-    })
-    .catch(err => console.error("Error:", err));
-}
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+            console.log(response);
+            if (response.status === "duplicate") {
+                alert("❌ This email has already taken the test.");
+            } else if (response.status === "success") {
+                alert("✅ Results successfully sent!");
+            } else {
+                alert("⚠️ Something went wrong: " + (response.message || ""));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("⚠️ Error sending data.");
+        });
+    }
 
     startButton.addEventListener('click', () => {
         if (!fullnameInput.value || !emailInput.value) {
-            alert("Пожалуйста, введите своё имя и email!");
+            alert("Please enter both your full name and email!");
             return;
         }
         introContainer.style.display = 'none';
@@ -128,4 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         questionContainer.style.display = 'block';
         showQuestion();
     });
+
+    doneButton.addEventListener('click', sendToGoogleSheet);
 });
