@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,18 +14,21 @@
         <input type="email" id="email" placeholder="Enter your email" required>
         <button id="start-button">Start Test</button>
     </div>
+
     <!-- Инструкции -->
     <div id="info-window" style="display: none;" class="container">
         <h2>Test Instructions</h2>
-        <p>The test consists of <strong>10 questions</strong>. Each question must be answered within <strong>10 seconds</strong>.</p>
+        <p>The test consists of <strong>30 questions</strong>. Each question must be answered within <strong>10 seconds</strong>.</p>
         <button id="ok-button">OK</button>
     </div>
+
     <!-- Вопросы -->
     <div id="question-container" style="display: none;" class="container">
         <h2 id="question"></h2>
         <div id="options"></div>
         <p>Time: <span id="time">10</span> seconds</p>
     </div>
+
     <!-- Результаты -->
     <div id="result" style="display: none;" class="container">
         <h3>Test Finished!</h3>
@@ -34,6 +36,7 @@
         <p>Correct Answers: <span id="correct-answers"></span></p>
         <button id="done-button">Done</button>
     </div>
+
     <script src="questions.js"></script>
     <script src="script.js"></script>
 </body>
