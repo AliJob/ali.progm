@@ -73,5 +73,82 @@ const questions = [
         question: "Marie Tussaud was born in what country?",
         options: ["Switzerland", "Italy", "France"],
         correctAnswer: "France"
+    },
+
+    {
+        question: "Mageiricophobia is the fear of what?",
+        options: ["cooking", "dancing", "drawing"],
+        correctAnswer: "cooking"
+    },
+    {
+        question: "What is the world's warmest sea?",
+        options: ["The Adriatic Sea", "The Red Sea", "Thе Black Sea"],
+        correctAnswer: "The Red Sea"
+    },
+    {
+        question: "What can be Safety, Tableaux or Swag?",
+        options: ["curtains in theatre", "electricity", "bodyguards"],
+        correctAnswer: "curtains in theatre"
+    },
+    {
+        question: "What`s Lenin Peak?",
+        options: ["a monument in Central Asia", "the name of street in Tajikistan", "a majestic mountain in the Pamir Mountains"],
+        correctAnswer: "a majestic mountain in the Pamir Mountains"
+    },
+    {
+        question: "Who discovered the laws of gravity, motion, invented calculus?",
+        options: ["Plato?", "Isaac Newton", "Aristotle"],
+        correctAnswer: "Isaac Newton"
+    },
+    {
+        question: "The initials pc on a medicine means it should be taken when…?",
+        options: [" after meals", " the past century", "post surgery state"],
+        correctAnswer: "after meals"
+    },
+    {
+        question: "Schubert always slept with what on…?",
+        options: ["on his desk", "spectacles -  he-in case he got idea", "on the floor"],
+        correctAnswer: "spectacles -  he-in case he got idea"
+    },
+    {
+        question: "Which country had the first women MPs 19 in 1907?",
+        options: ["Finland", "The Russian Federation", "India"],
+        correctAnswer: "Finland"
+    },
+    {
+        question: "Which drink did Bach enjoy so much he wrote a cantata for it?",
+        options: ["whisky", "red wine", "coffee"],
+        correctAnswer: "coffee"
+    },
+    {
+        question: "Cleopatra sometimes wore a fake what?",
+        options: ["wig for official duties", "arm for official duties", "beard for official dutues"],
+        correctAnswer: "beard for official dutues"
+    },
+    {
+        question: "When was abolished serfdom in Russia?",
+        options: ["on March 3, 1861", "On March 7, 1861", "On March 13,  1861"],
+        correctAnswer: "on March 3, 1861"
+    },
+    {
+        question: "What colour is iridium (редкий химический элемент)?",
+        options: ["dark blue", "light yellow", "steel grey"],
+        correctAnswer: "steel grey"
+    },
+    {
+        question: "How many regions are in Italy?",
+        options: ["35", "20", "18"],
+        correctAnswer: "20"
+    },
+    {
+        question: "Name Alice's pet cat?",
+        options: ["Dunah", "Donah", "Dinah"],
+        correctAnswer: "Dinah"
+    },
+    {
+        question: "Who was Dobby in Harry Potter (book)?",
+        options: ["a house elf", "a babysitter", "a magic stone"],
+        correctAnswer: "a house elf"
     }
+
 ];
