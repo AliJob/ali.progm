@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
 
     
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGdOYR3BVR1__wvLqAbqVkYmMH4icpqb76dGBo50PYlPOq-TNKuAgfR_EIc66dx_X1/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_e3rS0_uS4vz8Tyr60seUZMozIJ73v0qxm524eNt56_ONAi9FSM0gw1JKPtAOfx_2/exec";
 
     // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
