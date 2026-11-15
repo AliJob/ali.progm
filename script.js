@@ -1,4 +1,4 @@
-
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
     let currentQuestionIndex = 0;
     let time = 10;
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
 
     
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzV4msLNZUN5BEXPyYWsr2n6X72qVmyjhB7QfTqbjW_kRbjvlxM7TpXQHShnqCHp-h-/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGdOYR3BVR1__wvLqAbqVkYmMH4icpqb76dGBo50PYlPOq-TNKuAgfR_EIc66dx_X1/exec";
 
     // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
@@ -111,15 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.style.display = 'block';
         resultFullname.textContent = `Student: ${fullnameInput.value}`;
         resultCorrectElement.textContent = `${correctAnswers} out of ${questions.length}`;
-        doneButton.disabled = false;
-        doneButton.textContent = 'Done';
+        clearInterval(timerInterval);
+        sendToGoogleSheet(); // отправляем автоматически
     }
 
+    let sending = false;
+
     function sendToGoogleSheet() {
-        if (testCompleted) {
-            alert('Results already sent!');
-            return;
-        }
+        if (testCompleted || sending) return;
+        sending = true;
 
         doneButton.disabled = true;
         doneButton.textContent = 'Sending...';
@@ -138,26 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(result => {
                 console.log('Server response:', result);
+                sending = false;
                 if (result.status === 'success') {
-                    alert('Results sent successfully!');
-                    doneButton.textContent = 'Sent!';
+                    doneButton.textContent = 'Result sent ✓';
                     saveTestResult();
                     testCompleted = true;
+                } else if (/already taken/i.test(result.message || '')) {
+                    doneButton.textContent = 'Already Taken';
+                    alert(result.message);
                 } else {
-                    alert(result.message || 'Server error. Try again.');
-                    if (/already taken/i.test(result.message || '')) {
-                        doneButton.textContent = 'Already Taken';
-                    } else {
-                        doneButton.disabled = false;
-                        doneButton.textContent = 'Done';
-                    }
+                    alert(result.message || 'Server error. Press the button to try again.');
+                    doneButton.disabled = false;
+                    doneButton.textContent = 'Retry sending';
                 }
             })
             .catch(err => {
                 console.error('Send failed:', err);
-                alert('Failed to send. Check your connection and try again.');
+                sending = false;
+                alert('Failed to send the result. Check your connection and press "Retry sending".');
                 doneButton.disabled = false;
-                doneButton.textContent = 'Done';
+                doneButton.textContent = 'Retry sending';
             });
     }
 
