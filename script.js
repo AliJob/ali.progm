@@ -1,4 +1,4 @@
-// script.js
+
 document.addEventListener('DOMContentLoaded', () => {
     let currentQuestionIndex = 0;
     let time = 10;
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
 
     
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGdOYR3BVR1__wvLqAbqVkYmMH4icpqb76dGBo50PYlPOq-TNKuAgfR_EIc66dx_X1/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzV4msLNZUN5BEXPyYWsr2n6X72qVmyjhB7QfTqbjW_kRbjvlxM7TpXQHShnqCHp-h-/exec";
 
     // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Сохранить результат локально
     function saveTestResult() {
-        localStorage.setItem('englishTestEmail', fullnameInput.value.trim());
+        localStorage.setItem('englishTestEmail', emailInput.value.trim());
         localStorage.setItem('englishTestScore', correctAnswers);
         localStorage.setItem('englishTestDate', new Date().toLocaleDateString());
     }
@@ -124,37 +124,41 @@ document.addEventListener('DOMContentLoaded', () => {
         doneButton.disabled = true;
         doneButton.textContent = 'Sending...';
 
-        const data = {
+        const body = new URLSearchParams({
             fullname: fullnameInput.value.trim(),
             email: emailInput.value.trim(),
             correctAnswers: correctAnswers.toString(),
             totalQuestions: questions.length.toString()
-        };
-
-        console.log('Sending:', data);
-
-        const formData = new FormData();
-        for (const key in data) {
-            formData.append(key, data[key]);
-        }
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formData
-        })
-        .then(() => {
-            alert('Results sent successfully!');
-            doneButton.textContent = 'Sent!';
-            saveTestResult();
-            testCompleted = true;
-        })
-        .catch(err => {
-            console.error('Send failed:', err);
-            alert('Failed to send. Try again.');
-            doneButton.disabled = false;
-            doneButton.textContent = 'Done';
         });
+
+        console.log('Sending:', body.toString());
+
+        // Без no-cors, чтобы можно было прочитать ответ сервера
+        fetch(SCRIPT_URL, { method: 'POST', body })
+            .then(res => res.json())
+            .then(result => {
+                console.log('Server response:', result);
+                if (result.status === 'success') {
+                    alert('Results sent successfully!');
+                    doneButton.textContent = 'Sent!';
+                    saveTestResult();
+                    testCompleted = true;
+                } else {
+                    alert(result.message || 'Server error. Try again.');
+                    if (/already taken/i.test(result.message || '')) {
+                        doneButton.textContent = 'Already Taken';
+                    } else {
+                        doneButton.disabled = false;
+                        doneButton.textContent = 'Done';
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Send failed:', err);
+                alert('Failed to send. Check your connection and try again.');
+                doneButton.disabled = false;
+                doneButton.textContent = 'Done';
+            });
     }
 
     // === СТАРТ ===
