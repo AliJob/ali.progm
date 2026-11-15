@@ -116,49 +116,88 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let sending = false;
+    let submissionId = null;
 
-    function sendToGoogleSheet() {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // Чтение ответа без CORS (через <script>) — работает на любых телефонах
+    function jsonp(url, timeoutMs = 8000) {
+        return new Promise((resolve, reject) => {
+            const cb = 'cb_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+            const script = document.createElement('script');
+            const cleanup = () => { clearTimeout(timer); delete window[cb]; script.remove(); };
+            const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, timeoutMs);
+            window[cb] = data => { cleanup(); resolve(data); };
+            script.onerror = () => { cleanup(); reject(new Error('script error')); };
+            script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+            document.head.appendChild(script);
+        });
+    }
+
+    function makeId() {
+        return (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : 'id' + Date.now() + Math.random().toString(36).slice(2);
+    }
+
+    // Возвращает 'saved' | 'taken' | 'failed'
+    async function submitResult(body, email) {
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            // 1. Отправка (ответ не читаем — так надёжнее)
+            try {
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body });
+            } catch (err) {
+                console.warn('POST error (attempt ' + attempt + '):', err);
+            }
+            // 2. Проверка: действительно ли результат записался
+            try {
+                const checkUrl = SCRIPT_URL + '?action=check'
+                    + '&id=' + encodeURIComponent(submissionId)
+                    + '&email=' + encodeURIComponent(email);
+                const res = await jsonp(checkUrl);
+                console.log('Check:', res);
+                if (res.status === 'saved') return 'saved';
+                if (res.status === 'taken') return 'taken';
+            } catch (err) {
+                console.warn('Check error (attempt ' + attempt + '):', err);
+            }
+            await sleep(1500 * attempt);
+        }
+        return 'failed';
+    }
+
+    async function sendToGoogleSheet() {
         if (testCompleted || sending) return;
         sending = true;
+        if (!submissionId) submissionId = makeId();
 
         doneButton.disabled = true;
         doneButton.textContent = 'Sending...';
 
+        const email = emailInput.value.trim();
         const body = new URLSearchParams({
             fullname: fullnameInput.value.trim(),
-            email: emailInput.value.trim(),
+            email: email,
             correctAnswers: correctAnswers.toString(),
-            totalQuestions: questions.length.toString()
+            totalQuestions: questions.length.toString(),
+            submissionId: submissionId
         });
 
-        console.log('Sending:', body.toString());
+        const status = await submitResult(body, email);
+        sending = false;
 
-        // Без no-cors, чтобы можно было прочитать ответ сервера
-        fetch(SCRIPT_URL, { method: 'POST', body })
-            .then(res => res.json())
-            .then(result => {
-                console.log('Server response:', result);
-                sending = false;
-                if (result.status === 'success') {
-                    doneButton.textContent = 'Result sent ✓';
-                    saveTestResult();
-                    testCompleted = true;
-                } else if (/already taken/i.test(result.message || '')) {
-                    doneButton.textContent = 'Already Taken';
-                    alert(result.message);
-                } else {
-                    alert(result.message || 'Server error. Press the button to try again.');
-                    doneButton.disabled = false;
-                    doneButton.textContent = 'Retry sending';
-                }
-            })
-            .catch(err => {
-                console.error('Send failed:', err);
-                sending = false;
-                alert('Failed to send the result. Check your connection and press "Retry sending".');
-                doneButton.disabled = false;
-                doneButton.textContent = 'Retry sending';
-            });
+        if (status === 'saved') {
+            doneButton.textContent = 'Result sent ✓';
+            saveTestResult();
+            testCompleted = true;
+        } else if (status === 'taken') {
+            doneButton.textContent = 'Already Taken';
+            alert('This email has already taken the test!');
+        } else {
+            alert('Could not confirm that the result was saved. Check your connection and press "Retry sending".');
+            doneButton.disabled = false;
+            doneButton.textContent = 'Retry sending';
+        }
     }
 
     // === Проверка email ===
