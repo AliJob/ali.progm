@@ -161,6 +161,36 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // === Проверка email ===
+    const EMAIL_RE = /^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/i;
+    const COMMON_TYPOS = {
+        'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com', 'gmail.cm': 'gmail.com',
+        'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gamil.com': 'gmail.com',
+        'gmail.ru': 'gmail.com', 'gmaill.com': 'gmail.com',
+        'mail.ry': 'mail.ru', 'mail.ri': 'mail.ru', 'mal.ru': 'mail.ru',
+        'yandex.ry': 'yandex.ru', 'yaho.com': 'yahoo.com', 'yahho.com': 'yahoo.com',
+        'outlok.com': 'outlook.com', 'hotmial.com': 'hotmail.com'
+    };
+
+    // Возвращает true, если email можно принять
+    function validateEmail(email) {
+        if (!EMAIL_RE.test(email)) {
+            alert('Please enter a valid email address (for example: name@gmail.com).');
+            return false;
+        }
+        const domain = email.split('@')[1].toLowerCase();
+        const fix = COMMON_TYPOS[domain];
+        if (fix) {
+            const suggested = email.split('@')[0] + '@' + fix;
+            if (confirm(`Is your email correct?\n\n${email}\n\nPress Cancel to fix it (maybe you meant ${suggested}).\nPress OK if it is correct.`)) {
+                return true;
+            }
+            emailInput.focus();
+            return false;
+        }
+        return true;
+    }
+
     // === СТАРТ ===
     startButton.addEventListener('click', () => {
         const fullname = fullnameInput.value.trim();
@@ -170,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Please enter both your full name and email!");
             return;
         }
+
+        if (!validateEmail(email)) return;
 
         if (checkIfAlreadyTaken()) return;
 
