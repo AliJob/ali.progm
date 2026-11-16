@@ -12,7 +12,7 @@ const questions = [
     { question: "What is the true origin of the 6/7 meme (2024)?", options: ["a track by the American rapper Skrilla", "Satan's battle against God", "the effects of the war"], correctAnswer: "Satan's battle against God" },
     { question: "“Reject” means (choose one phrasal verb with the same meaning)?", options: ["turn back", "turn in", "turn down"], correctAnswer: "turn down" },
     { question: "What lexical unit (word) doesn't belong to the Italian language?", options: ["felicità", "oronero", "navidad"], correctAnswer: "navidad" },
-    { question: "Vor was the Norse goddess of what?", options: ["truth", "love", "indignity"], correctAnswer: "love" },
+    { question: ""Vor" was the Norse goddess of what?", options: ["truth", "love", "indignity"], correctAnswer: "love" },
     { question: "What fashion designer was responsible for “The New Look”?", options: ["Versace", "Christian Dior", "Chanel"], correctAnswer: "Christian Dior" },
     { question: "What country was Marie Tussaud born in?", options: ["Switzerland", "Italy", "France"], correctAnswer: "France" },
     { question: "What disease was F. Dostoevsky suffering from?", options: ["epilepsy", "chickenpox", "allergy"], correctAnswer: "epilepsy" },
