@@ -1,7 +1,7 @@
 // script.js
 document.addEventListener('DOMContentLoaded', () => {
     let currentQuestionIndex = 0;
-    let time = 10;
+    let time = 15;
     let timerInterval;
     let correctAnswers = 0;
     let testCompleted = false;
