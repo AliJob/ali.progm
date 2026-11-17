@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обновляем инструкции
     document.querySelector('#info-window p').innerHTML =
-        `The test consists of <strong>${questions.length} questions</strong>. Each question must be answered within <strong>10 seconds</strong>.`;
+        `The test consists of <strong>${questions.length} questions</strong>. Each question must be answered within <strong>15 seconds</strong>.`;
 
     // Проверка: уже проходил?
     function checkIfAlreadyTaken() {
