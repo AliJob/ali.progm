@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startTimer() {
-        time = 10;
+        time = 15;
         timeElement.textContent = time;
         timerInterval = setInterval(() => {
             time--;
